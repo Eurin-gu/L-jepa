@@ -1,0 +1,17 @@
+import numpy as np, json
+base = "/mnt/d/lagrangian-jepa-cn/data/build/smoke_out"
+x = np.load(base + "/x.npy"); y = np.load(base + "/y.npy")
+meta = json.load(open(base + "/meta.json"))
+print("x", x.shape, x.dtype, "y", y.shape, y.dtype)
+print("meta keys", list(meta.keys()))
+print("n_samples", meta["n_samples"], "n_skipped", meta["n_skipped"], "samples", len(meta["samples"]))
+print("contract_fingerprint", meta["contract_fingerprint"][:16])
+print("arrays", {k: (v["shape"], v["dtype"], v["sha256"][:12]) for k, v in meta["arrays"].items()})
+print("sample0", json.dumps(meta["samples"][0], indent=1)[:900])
+print("ch0 impulse max at center:", x[0,0,64,64], "sum ch0:", float(x[0,0].sum()))
+print("per-sample finite x/y:", bool(np.isfinite(x).all()), bool(np.isfinite(y).all()), "y>=0:", bool((y>=0).all()))
+print("y mean/sum per sample:", [float(y[i].mean()) for i in range(len(y))], [float(y[i].sum()) for i in range(len(y))])
+print("ch1 (U10M@t0) stats over sample0:", float(np.nanmean(x[0,1])), float(np.nanmin(x[0,1])), float(np.nanmax(x[0,1])))
+print("ch17 x_coord range:", float(x[0,17].min()), float(x[0,17].max()))
+print("ch18 y_coord range:", float(x[0,18].min()), float(x[0,18].max()))
+print("ch19 radius range:", float(x[0,19].min()), float(x[0,19].max()))

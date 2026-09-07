@@ -1,0 +1,26 @@
+merged: /mnt/d/lagrangian-jepa-cn/data/datasets/formal_hrrr_train_p250_all n= 1200
+{
+  "inputs": {
+    "path": "/mnt/d/lagrangian-jepa-cn/data/datasets/formal_hrrr_train_p250_all/x.npy",
+    "bytes": 1572864128,
+    "sha256": "8a44a5c412b9e16dbea217b02def51409e45194c4f46a9d0a59702a6e4a97189",
+    "shape": [
+      1200,
+      20,
+      128,
+      128
+    ],
+    "dtype": "float32"
+  },
+  "targets": {
+    "path": "/mnt/d/lagrangian-jepa-cn/data/datasets/formal_hrrr_train_p250_all/y.npy",
+    "bytes": 78643328,
+    "sha256": "ea150d262ef2b1b8269e8f29d89bf69c8354e799bf72827cffb6d6ce185a14a5",
+    "shape": [
+      1200,
+      128,
+      128
+    ],
+    "dtype": "float32"
+  }
+}

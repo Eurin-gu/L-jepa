@@ -1,0 +1,5 @@
+sample0: lat 33.33117 lon -117.48405 sim hrrr-analysis-20160318-p1000-h24-m859a494a9cd6_20160318T210435Z_ef3892a476c8 coverage 0.9844 footprint_sum 109.255 source_grid [116, 138]
+y0 argmax (row,col)=(np.int64(63), np.int64(64)) val=7.0106
+receptor db-cell (282.511,404.347) direct npz U10M=4.26923 vs x ch1=4.26923  diff=-2.29e-07
+finite x/y all: True True  y>=0: True
+per-channel-1..4 (t0 U,V,PBLH,PRSS normalized) means over samples: [0.1462584137916565, -0.09533780068159103, 0.34550899267196655, 0.5393766164779663]

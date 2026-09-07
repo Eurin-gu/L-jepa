@@ -1,0 +1,22 @@
+{
+  "date": "20171111",
+  "source_type": "hrrr_wrfprs_surface",
+  "directory": "/mnt/d/lagrangian-jepa-cn/met_cache/hrrr_20171111",
+  "params": {
+    "file_prefix": "",
+    "file_suffix": ".grib2"
+  },
+  "snapshots": [
+    "20171111.02z",
+    "20171111.08z",
+    "20171111.14z",
+    "20171111.20z"
+  ],
+  "fields": [
+    "U10M",
+    "V10M",
+    "PBLH",
+    "PRSS"
+  ],
+  "note": "HRRR wrfprs hourly f00 analysis files YYYYMMDDHH.grib2; U10M=10u@10m AGL, V10M=10v@10m AGL, PBLH=blh@surface, PRSS=sp@surface."
+}

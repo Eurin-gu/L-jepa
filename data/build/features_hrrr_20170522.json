@@ -1,0 +1,22 @@
+{
+ "date": "20170522",
+ "source_type": "hrrr_wrfprs_surface",
+ "directory": "/mnt/d/lagrangian-jepa-cn/met_cache/hrrr_20170522",
+ "params": {
+  "file_prefix": "",
+  "file_suffix": ".grib2"
+ },
+ "snapshots": [
+  "20170522.03z",
+  "20170522.09z",
+  "20170522.15z",
+  "20170522.21z"
+ ],
+ "fields": [
+  "U10M",
+  "V10M",
+  "PBLH",
+  "PRSS"
+ ],
+ "note": "HRRR wrfprs hourly f00 analysis files YYYYMMDDHH.grib2; cv 20170522 ~21Z receptors"
+}

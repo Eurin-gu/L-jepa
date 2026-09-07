@@ -1,0 +1,6 @@
+role,date,built,n,validate_rc,asset_ok,asset_reason,notes
+formal_test_p1000,20160318,True,"(120, 20, 128, 128) float32",0,True,npz=4 by-id-runs=120,
+formal_test_p1000,20160802,True,"(120, 20, 128, 128) float32",0,True,npz=4 by-id-runs=120,
+formal_test_p1000,20161111,True,"(120, 20, 128, 128) float32",0,True,npz=4 by-id-runs=120,
+formal_test_p1000,20170116,True,"(120, 20, 128, 128) float32",0,True,npz=4 by-id-runs=120,
+formal_test_p1000,20170922,True,"(120, 20, 128, 128) float32",0,True,npz=4 by-id-runs=120,

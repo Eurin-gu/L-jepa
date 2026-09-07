@@ -1,0 +1,129 @@
+{
+  "arrays": {
+    "inputs": {
+      "bytes": 3932288,
+      "dtype": "float32",
+      "path": "/mnt/d/lagrangian-jepa-cn/data/build/smoke_out/x.npy",
+      "sha256": "3a1550ff72ba80c874bef4d90cbc17b92fae1413da7713a07f3a4f7dda656f86",
+      "shape": [
+        3,
+        20,
+        128,
+        128
+      ]
+    },
+    "targets": {
+      "bytes": 196736,
+      "dtype": "float32",
+      "path": "/mnt/d/lagrangian-jepa-cn/data/build/smoke_out/y.npy",
+      "sha256": "11226ac97732a8a14a25d73dcc131d433a66c00e725bd2762bed951efcb373f2",
+      "shape": [
+        3,
+        128,
+        128
+      ]
+    }
+  },
+  "contract": {
+    "backhours": [
+      0,
+      6,
+      12,
+      18
+    ],
+    "diffusivity_m2_s": 5000.0,
+    "dt_seconds": 600.0,
+    "feature_layout": [
+      "receptor_impulse",
+      "4x[U10M,V10M,PBLH,PRSS]",
+      "local_x_over_half_domain",
+      "local_y_over_half_domain",
+      "radius_over_half_domain"
+    ],
+    "grid": 128,
+    "grid_origin": "receptor_at_index_grid_div_2",
+    "hperblock": 6.0,
+    "label_source": "stilt_xstilt",
+    "met_offsets": [
+      0.0,
+      0.0,
+      1000.0,
+      90000.0
+    ],
+    "met_scales": [
+      0.1,
+      0.1,
+      0.001,
+      0.0001
+    ],
+    "meteorology": {
+      "alignment": "valid_time_only_not_same_cycle",
+      "model_input_source": "rolling_hrrr_lite_analysis_f00",
+      "stilt_driver_source": "external_manifest_unspecified"
+    },
+    "minimum_capture_fraction": 0.8,
+    "npart": 0,
+    "random_receptor_bounds": null,
+    "receptor_mode": "oco2",
+    "schema_version": 5,
+    "spacing_km": 4.0,
+    "target_mode": "stilt_surface_footprint_physical"
+  },
+  "contract_fingerprint": "653af64fa131c4e7d8562e3f100a0aedbb0d00d880635cfa9b7e7acd046c2c68",
+  "label_source": "stilt_xstilt",
+  "manifest": "/root/stilt_out/manifest_20171111_p250.csv",
+  "meteorology_manifest": null,
+  "n_samples": 3,
+  "n_skipped": 0,
+  "samples": [
+    {
+      "coverage": 0.98443603515625,
+      "footprint_sum": 17.519042789324512,
+      "latitude": 32.00134,
+      "longitude": -116.23976,
+      "run_time": "2017-11-11T20:46:41Z",
+      "sim_id": "hrrr-so-20171111-p250_20171111T204641Z_4e47e91dcaf0",
+      "snapshot": "20171111.20z",
+      "source_grid": [
+        116,
+        136
+      ],
+      "units": "stilt_surface_sensitivity",
+      "zagl": 5.0
+    },
+    {
+      "coverage": 0.98443603515625,
+      "footprint_sum": 16.20622553611271,
+      "latitude": 32.06881,
+      "longitude": -116.26682,
+      "run_time": "2017-11-11T20:46:42Z",
+      "sim_id": "hrrr-so-20171111-p250_20171111T204642Z_be9521a43421",
+      "snapshot": "20171111.20z",
+      "source_grid": [
+        116,
+        136
+      ],
+      "units": "stilt_surface_sensitivity",
+      "zagl": 5.0
+    },
+    {
+      "coverage": 0.98443603515625,
+      "footprint_sum": 17.75375646332307,
+      "latitude": 32.12206,
+      "longitude": -116.2862,
+      "run_time": "2017-11-11T20:46:43Z",
+      "sim_id": "hrrr-so-20171111-p250_20171111T204643Z_2e29d4c84320",
+      "snapshot": "20171111.20z",
+      "source_grid": [
+        116,
+        136
+      ],
+      "units": "stilt_surface_sensitivity",
+      "zagl": 5.0
+    }
+  ],
+  "snapshots": [
+    "20171111.20z"
+  ],
+  "source_fingerprint": "522e56baa8fa5dbc1a011b20ff7e25ccc8079f041b7ec7fadbf1292ea7948567"
+}

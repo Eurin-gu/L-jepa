@@ -1,0 +1,28 @@
+{
+  "date": "20171023",
+  "source_type": "era5_sfc_day",
+  "directory": "/mnt/d/lagrangian-jepa-cn/met_cache/era5d/po_valley_italy",
+  "selectors": {
+    "U10M": [
+      "10u",
+      "surface",
+      0
+    ],
+    "V10M": [
+      "10v",
+      "surface",
+      0
+    ],
+    "PBLH": [
+      "blh",
+      "surface",
+      0
+    ],
+    "PRSS": [
+      "sp",
+      "surface",
+      0
+    ]
+  },
+  "note": "ERA5 0.25 single-level daily grib; per-hour message selection by dataTime."
+}

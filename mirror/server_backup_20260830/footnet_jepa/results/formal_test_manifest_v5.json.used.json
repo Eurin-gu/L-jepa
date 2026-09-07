@@ -1,0 +1,8 @@
+{
+  "consumed_utc": "2026-08-30T13:11:53.451916+00:00",
+  "formal_test_manifest": "/root/autodl-tmp/footnet_jepa/results/formal_test_manifest_v5.json",
+  "formal_test_manifest_sha256": "7268016d9cf8eb9a279f53563e3cb546ab2a19d96b4b963122158aeb3ddede94",
+  "schema_version": 1,
+  "source_fingerprint": "a8b563138eb14e1464b4347d1efd126923a4e606cfa90159e4ace33a59be6658",
+  "status": "formal_test_consumed"
+}

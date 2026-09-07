@@ -1,0 +1,10 @@
+DATA2ARL files are part of HYSPLIT. They are subject to the
+same use agreement and the disclaimer applicable to HYSPLIT.
+
+Please read the HYSPLIT Use Agreement and the disclaimer:
+
+HYSPLIT USE AGREEMENT
+	See https://www.ready.noaa.gov/HYSPLIT_agreement.php
+
+DISCLAIMER STATEMENT
+	See https://www.ready.noaa.gov/disclaimer.php

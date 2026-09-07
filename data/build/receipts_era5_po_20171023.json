@@ -1,0 +1,11 @@
+{
+  "cycle_mode": "hourly",
+  "driver_source": "era5_sfc_day_grib_po_valley_italy_20171023",
+  "label_met_source": "era5-v1-po_valley_italy-20171023-p250",
+  "files": {
+    "20171023_SFC": {
+      "path": "/mnt/d/lagrangian-jepa-cn/met_cache/era5d/po_valley_italy/20171023_SFC.GRIB",
+      "sha256": "39b1af4ec713fb73a82a73aec3929fcd8f1128a2755f89088fba3d79a434ea14"
+    }
+  }
+}

@@ -1,0 +1,122 @@
+# ---------------------------------------------------------------------------
+# Lagrangian-JEPA 仓库忽略规则
+# 原则：只跟踪代码与决策文档；数据产物、气象缓存、预编译二进制、依赖、凭据一律排除。
+# 实测基线（2026-09-07 建库前勘察）：全仓 ~114 GB，入库目标 ~22 MB。
+# ---------------------------------------------------------------------------
+
+# ===== 1. 凭据（最高优先，原文件保留在磁盘但不入库） =====
+# 阿里云 AccessKey ID + Secret 明文（第 55-56 行）
+/mirror/server_backup_20260830/footnet_jepa/agent.md
+# CDS API key 明文（写入 ~/.cdsapirc 的脚本）
+/toolchain/wsl_rc.sh
+/toolchain/wsl_cdsapi2.sh
+# 通用兜底：任何形态的密钥/凭据文件
+.cdsapirc
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+.env
+.env.*
+credentials*
+*secret*.json
+*apikey*
+*access_key*
+
+# ===== 2. 数据集产物（体积主体） =====
+# 注意：data/receptors_v2/ 特意保留入库——45 张受体表(1.81 MB, 含 provenance)
+#       是科学定义性文件，非数据产物，重建代价高。
+/data/datasets/
+/data/genghg/
+/data/prod_*/
+/data/strict_*/
+/data/receptors/
+# 2026-09-07 建库时闸门拦下后补入：此子树 20.7 GB，
+# 含 9 个 prod_all_v*/meta.json（最大 11.93 MB），属数据产物派生物。
+/data/server_backup_20260830/
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+*.rds
+*.nc
+*.nc4
+*.h5
+*.hdf5
+*.zarr/
+# mirror 内的数据集与缓存
+# 注意：results/ 特意保留入库——49 个实验结果 json(5.92 MB)是 7-arm×5-seed 的
+#       历史记录；其中的 *.pt 权重已被下方全局规则排除。
+/mirror/server_backup_20260830/footnet_jepa/data/
+/mirror/server_backup_20260830/footnet_jepa/hrrr_cache/
+/mirror/server_backup_20260830/footnet_jepa/code_sync.tar.gz
+
+# ===== 3. 气象缓存与复用标签（~54 GB） =====
+/met_cache/
+/reuse_stilt/
+/downloads/
+/mirror/manifest.csv
+
+# ===== 4. 预编译二进制与大 GRIB（~390 MB） =====
+/toolchain/server_backup_20260830/era5/20240401/
+/toolchain/server_backup_20260830/stilt/exe/
+/toolchain/server_backup_20260830/stilt/bin/
+/toolchain/server_backup_20260830/hysplit_data2arl.zip
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.gz
+*.bz2
+*.xz
+*.so
+*.o
+*.a
+*.lib
+*.pyd
+*.dll
+*.exe
+# 无扩展名的编译产物（源码 .f 已入库，可重新编译）
+/toolchain/server_backup_20260830/hysplit_data2arl/hysplit_data2arl/era52arl/era52arl
+*.whl
+*.mp4
+*.webm
+*.png
+*.jpg
+*.jpeg
+
+# ===== 5. Python 环境与依赖（~775 MB，21586 文件） =====
+/py311/
+.venv*/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyi
+.ipynb_checkpoints/
+
+# ===== 6. 日志与临时产物 =====
+# 全局排除日志，但保留 data/build/ 下的构建日志（预注册审计证据，
+# 例如 ARM_BUILD_REPORT.md 明确引用的 build_20170720.log documented skip）
+*.log
+!/data/build/*.log
+!/data/build/**/*.log
+*.tmp
+*.temp
+*.bak
+*.part
+*.part[0-9][0-9]
+*.swp
+*~
+.DS_Store
+Thumbs.db
+_writetest.txt
+.workbuddy/
+
+# ===== 7. 编辑器与工具状态 =====
+.vscode/
+.idea/
+*.iml

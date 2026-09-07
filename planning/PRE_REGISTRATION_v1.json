@@ -1,0 +1,110 @@
+{
+  "schema": "pre-registration/v1",
+  "project": "Lagrangian-JEPA / JEPA-FootNet — global multi-terrain real-STILT holdout generalization",
+  "frozen_at_true_utc": "2026-09-05T03:30:00Z",
+  "_note": "本文件已冻结。sha256_of_this_file = sha256(本文件内容将该字段置空后的哈希)，回写于 2026-09-05。此后任何指标口径/split/seed/test manifest 修改必须出新版本并写明动机。",
+
+  "regions_and_roles": {
+    "train_core": ["so_cal_LA_basin", "cent_valley_CA", "po_valley_italy", "north_china_plain"],
+    "holdout_independent": ["permian_westTX"],
+    "holdout_diagnostic_hardest_terrain": ["co_front_range"],
+    "loro": "leave-one-region-out 全轮换（6 区逐一留出），主结果 = LORO 平均 + 每区独立指标",
+    "met_sources": {
+      "era5-v1": "主线，六区全部，ERA5 0.25°，2015-01~2017-11",
+      "hrrr-v1": "对照臂，仅 SoCal，HRRR 2016-17，与 era5-v1 同日期配对对照",
+      "rule": "特征与标签同源同循环；混源必须换 tag + 新 manifest；复用 HRRR 标签只进 hrrr-v1 臂"
+    }
+  },
+
+  "labels": {
+    "type": "真实 STILT/X-STILT 5m 地表通量敏感性足迹（surface-flux sensitivity footprint）",
+    "explicit_non_claim": "一期所有结论仅限 5m 地表足迹算子；禁止用 5m 足迹卷积排放逼近 OCO-2 柱 XCO2 并宣称物理正确",
+    "column_mode_phase2": {
+      "heights_m_agl": [5, 100, 300, 800, 1500, 3000, 6000],
+      "weight_rule": "w_z 按 X-STILT (Wu et al. 2018) 气压厚度加权，公式在二期 pre-reg 增补冻结，实现者不得自创",
+      "background": "二期增补冻结（24h 回溯截断的背景处理方案）"
+    },
+    "particle_counts": {"train": 250, "validation": 1000, "test_and_holdout": 1000},
+    "forbidden": ["粒子代理标签", "克隆/合成假数据", "2024_ext_merged 及黑名单产品"]
+  },
+
+  "metrics": {
+    "levels": ["逐样本（不得 pooled 抵消）", "按日期聚合"],
+    "transforms": ["raw", "log10(x+offset)", "amplitude-normalized"],
+    "log_offset": "1e-4 × 参考足迹中位数（按留出区 p1000 参考全集计算一次并记录数值）",
+    "js_overlap": "128² 网格 + 5km 空间平滑核后计算",
+    "primary": ["Pearson r", "RMSE", "relRMSE", "JS divergence", "Overlap", "Mass error", "Center distance (km)", "Peak distance (km)"],
+    "reporting": "r 与 relRMSE 并列主指标（禁止只报 r；split-half relRMSE≈0.34 表明幅度噪声远大于相关性噪声）",
+    "statistics": "独立单元=日期；配对检验用按日期聚类的 cluster-robust SE；样本量写 N_receptor/N_date；≥20 独立测试日期才下正式推断"
+  },
+
+  "noise_floor": {
+    "method": "共享受体 split-half（p1000 拆 p500a/p500b）+ 独立 p250 对照",
+    "correct_ceiling_formula": "模型对 p1000 参考的理论 r 上限 = sqrt(1/(1+s2))，其中 s2 = sigma2_noise(p1000)/sigma2_signal，由 split-half 关系 r_sh = 1/(1+2*s2) 反解 s2 = (1-r_sh)/(2*r_sh)",
+    "worked_example_20171111": "r_sh=0.9869 → s2≈0.00664 → 模型 r 上限≈0.9967（不是 0.9869）；模型 r 在 (r_sh, 0.9967] 区间合法",
+    "normalization": "所有臂指标相对 noise-floor 标尺报告 Δ；r 归一化分母用上式推导的上限，禁止直接用 split-half r 当分母",
+    "scope_rule": "noise floor 按 (区域×气象源) 分别测量；单日期单区结果不得外推为全标签体系属性",
+    "measured": [{"region": "so_cal_LA_basin", "met": "HRRR", "date": "20171111", "r_sh_median": 0.9869, "relRMSE_median": 0.340, "n_receptors": 30, "status": "pilot-only-not-generalizable"}]
+  },
+
+  "splits_and_seeds": {
+    "seed_protocol": "正式实验 5 seeds（列表在训练启动时生成 sha256 记录），报告跨 seed 均值±标准差与配对 CI",
+    "within_region_split": "区域内 val/test 按时间块切分（blocked），禁止随机日期拆分（防季节/天气型泄漏）",
+    "validation_use": "val 仅用于早停/超参选择；有效日期数 <5 时禁止基于 val 的任何显著性结论",
+    "quarantined_dates": {
+      "smoke_debug": ["20171111"],
+      "rule": "冒烟/调试/noise-floor 用过的日期永久不得进入任何正式 test manifest"
+    }
+  },
+
+  "test_manifests": {
+    "hrrr-v1": {
+      "formal_test_dates": ["20160318", "20160802", "20161111", "20170116", "20170922"],
+      "status": "已建集（仅文件校验，未评估），沿用旧正式线 5 日期；一次性消费，.used.json 机制",
+      "scope": "仅支撑 SoCal 同区日期留出结论，不得作为跨地形泛化证据"
+    },
+    "era5-v1": {
+      "status": "OPEN — 待 ERA5 数据就绪后从未触碰日期池抽取，抽取规则：每区按密度分层随机，train:val:test 按日期 60:20:20，抽取后 sha256 回写本文件",
+      "hard_rule": "era5-v1 测试集独立定义，禁止复用 hrrr-v1 的 5 个日期语义（同日期可出现在两臂但属独立实验）"
+    }
+  },
+
+  "baselines": {
+    "train_mean": "最低检查线，非主要基线",
+    "wind_driven_zero_param": "风场驱动零参数基线（常速平流/局地风聚类先验足迹），与模型同一 noise-floor 标尺报告",
+    "learned_arms": ["scratch", "met_mae", "eulerian_jepa", "lagrangian_jepa", "unetpp", "fno"],
+    "fairness": "相同 encoder/decoder/参数量/监督数据/训练预算/优化器；差异方可归因于预训练目标"
+  },
+
+  "experiments": {
+    "exp1_main": "6 区 LORO + 双留出（permian / co_front_range），era5-v1",
+    "exp2_hrrr_era5_paired": "SoCal 同日期同受体 HRRR×ERA5 配对对照（重叠月份）",
+    "exp3_genghg": "独立实验，独立 test manifest，独立章节，禁止与自建数据合并叙事",
+    "exp4_pretrain_pool_scan": "预训练池 0×/1×/3×/10× 消融，固定下游评测",
+    "exp5_phase2_xco2": "柱灵敏度 × 排放前向模拟 vs OCO-2（SoCal Hestia 先行），二期，需增补 pre-reg"
+  },
+
+  "decisions_taken_pre_registration_annex": {
+    "_honesty_note": "以下决策发生于本冻结之前，如实记录，不追溯伪装",
+    "items": [
+      "formal_hrrr 臂已建集：train 10 日×120(p250) + val 2 日×120(p1000) + formal_test 5 日×120(p1000)，双校验 PASS；formal_test 未评估",
+      "train 日期 20170720 因本地资产缺失 documented skip（非随机缺失，已记录 build_20170720.log）",
+      "noise floor 试点测量于 20171111（SoCal/HRRR，30 受体）——该日期已隔离",
+      "zagl=5m 地表足迹定位决策（评审点2）已冻结：一期仅算子 benchmark",
+      "v2.2 同源铁律已立，但 formal_hrrr 复用臂 meta.json 暂无 meteorology receipts（valid_time_only_not_same_cycle）——豁免待论证或 receipts 待补",
+      "GPU 冒烟训练已在 so_hrrr_20171111 上运行（工程验证，非正式实验）",
+      "区域受体表 35 张已生成（QC+maximin, seed 20260822）"
+    ]
+  },
+
+  "open_items_blocking_formal_runs": [
+    "era5-v1 test manifest 抽取与回写",
+    "val 日期扩充方案（hrrr 臂 val 当前仅 2 日期）",
+    "复用臂 meteorology receipts 补齐或书面豁免论证",
+    "co_front_range 标签退化交叉验证（HRRR-STILT 子集 vs ERA5-STILT）",
+    "二期柱灵敏度 w_z 公式与背景方案增补冻结",
+    "阿里云 AccessKey 与 CDS key 轮换（安全，阻塞性）"
+  ],
+
+  "sha256_of_this_file": "c7b9b0a58222ae8feba62b18c1b7a7a2eab328b6b258ab5eae3e3916a8679b36"
+}

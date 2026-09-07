@@ -1,0 +1,168 @@
+# STILT label pipeline
+
+Generates physically-based surface footprint labels (and trajectories) with
+[uataq/stilt](https://github.com/uataq/stilt), replacing the
+`simple_lagrangian` proxy. These are the labels for data schema v5
+(`LABEL_SOURCE = "stilt_xstilt"` in `config.py`).
+
+## Prerequisites (one-time, on the Autodl box)
+
+```bash
+cd /root/autodl-tmp/stilt && ./setup          # hycs_std + permute.so  ✅ done
+Rscript /tmp/install_pkgs.r                   # lubridate/ncdf4/...    ✅ done
+```
+
+GDAS ARL week files live in `/root/autodl-tmp/met/`.
+
+## HRRR GRIB2 -> ARL (modern ecCodes)
+
+The NOAA `hrrrv12arl_v2.f` source predates the long ecCodes `typeOfLevel`
+names. Applying the unmodified converter to current AWS HRRR files can leave
+the grid at `0 x 0`, write a `00/00/00` timestamp, or silently emit a
+surface-only ARL file. Apply the maintained compatibility patch before using
+current HRRR data:
+
+```bash
+cd /root/data2arl/hrrr2arl
+cp -a hrrrv12arl_v2.f hrrrv12arl_v2.f.orig
+# The patch baseline is the pristine GRIB-API converter shipped as v1.
+cp hrrrv12arl_v1.f hrrrv12arl_v2.f
+patch < /root/autodl-tmp/footnet_jepa/stilt_pipeline/patches/\
+hrrrv12arl_v2_modern_eccodes.patch
+bash /root/build_hrrr2arl.sh
+```
+
+Do not use `wrfsfc` as a 3D STILT input. It contains only a few incomplete
+diagnostic pressure levels. Download the required records from `wrfprs` using
+the adjacent NOAA byte-offset index:
+
+```bash
+python3 fetch_hrrr_arl_subset.py \
+  --date 20240705 --hour 18 \
+  --out /root/autodl-tmp/hrrr_subset/20240705.18.grib2
+```
+
+This fetches complete GRIB messages for HGT/TMP/RH/DPT/SPFH/VVEL/UGRD/VGRD
+on the configured pressure levels, plus the surface fields used by STILT. It
+does not download or rewrite partial GRIB messages.
+
+Some proxies throttle the many HTTP ranges used by that command. When a full
+object is substantially faster, download it with aria2 and extract the same
+messages locally:
+
+```bash
+python3 fetch_hrrr_arl_full.py \
+  --date 20240704 --hour 18 \
+  --forecast-hours 0 3 9 15 21 27 \
+  --out-dir /media/ubuntu22/YUYING/arl_jul05 \
+  --proxy http://127.0.0.1:7897
+```
+
+This workflow resumes only files carrying an aria2 incomplete marker, verifies
+every complete full GRIB against its NOAA index, extracts locally, and verifies
+the subset again. For a 24-hour backward run ending at 2024-07-05 18Z, this
+cycle spans 2024-07-04 18Z (`f00`) through 2024-07-05 21Z (`f27`); the final
+time lies between `f21` and `f27`. Do not omit `f00`, which covers the backward
+endpoint. Add `--remove-full` only when the validated full objects are no
+longer needed.
+
+Convert each time in a clean working directory. Reuse the same `arldata.cfg`
+only when every input has the same grid, levels, and variable contract:
+
+```bash
+mkdir -p /root/autodl-tmp/hrrr_arl/20240705_18
+cd /root/autodl-tmp/hrrr_arl/20240705_18
+/root/data2arl/hrrr2arl/hrrrv12arl_v2 \
+  -dapi2arl.cfg -earldata.cfg \
+  -i/root/autodl-tmp/hrrr_subset/20240705.18.grib2 \
+  -o20240705.18.hrrra -gHRRR
+
+python3 /root/autodl-tmp/footnet_jepa/stilt_pipeline/validate_arl_met.py \
+  --arl 20240705.18.hrrra --config arldata.cfg
+```
+
+Validation must report a real timestamp, pressure-coordinate upper levels,
+and the required STILT surface/upper-air fields. A successful Fortran build or
+a nonzero output size is not sufficient validation.
+
+Each converter invocation writes one time block. STILT must receive one ARL
+archive containing every hourly block that covers the complete trajectory;
+separate one-time files do not provide temporal interpolation. Merge the files
+in chronological order only after each conversion succeeds:
+
+```bash
+python3 /root/autodl-tmp/footnet_jepa/stilt_pipeline/merge_arl_met.py \
+  --input /root/autodl-tmp/hrrr_arl/20240705_17/20240705.17.hrrra \
+          /root/autodl-tmp/hrrr_arl/20240705_17/arldata.cfg \
+  --input /root/autodl-tmp/hrrr_arl/20240705_18/20240705.18.hrrra \
+          /root/autodl-tmp/hrrr_arl/20240705_18/arldata.cfg \
+  --out /root/autodl-tmp/met/hrrr.20240705.17-18.arl \
+  --out-config /root/autodl-tmp/hrrr_arl/merged_17_18/arldata.cfg
+
+python3 /root/autodl-tmp/footnet_jepa/stilt_pipeline/validate_arl_met.py \
+  --arl /root/autodl-tmp/met/hrrr.20240705.17-18.arl \
+  --config /root/autodl-tmp/hrrr_arl/merged_17_18/arldata.cfg --min-times 2
+```
+
+The merger rejects a changed projection/grid/level/variable configuration,
+duplicate or decreasing valid times, malformed inputs, and existing outputs.
+Use `--force` only when intentionally replacing a previously validated pair.
+Keep `arldata.cfg` outside the STILT meteorology directory because STILT scans
+that directory by date-bearing filename and would otherwise treat it as data.
+
+HRRR `wrfprs` analysis files do not publish U/V momentum-flux records. HYSPLIT
+may therefore log `FLUXES not found` and select `KBLS=2`; that fallback is
+expected and was exercised by the trajectory smoke test. Do not manufacture
+`UMOF`/`VMOF` from unrelated surface fields merely to suppress the warning.
+
+## Steps
+
+### 0. Day symlinks for met files (rerun whenever new .wN files arrive)
+
+```bash
+bash make_met_links.sh /root/autodl-tmp/met
+```
+
+`find_met_files()` greps filenames by `%Y%m%d`; the week archives carry no
+date, so each day gets a symlink to its week file.
+
+### 1. Receptor list from OCO-2 Lite
+
+```bash
+python3 make_receptors.py \
+    --lite /root/autodl-tmp/oco2_lite/oco2_LtCO2_240402_*.nc4 \
+    --n 120 --out /root/autodl-tmp/receptors/apr02.csv
+```
+
+### 2. Run STILT over all receptors
+
+```bash
+python3 run_batch.py --receptors /root/autodl-tmp/receptors/apr02.csv \
+    --stilt-wd /root/autodl-tmp/stilt --met /root/autodl-tmp/met \
+    --jobs 16 --numpar 1000
+```
+
+Each receptor gets a receptor-centred ±256 km footprint window at 0.04°,
+matching the FootNet domain geometry; `time_integrate=T` produces a single
+integrated 24 h surface footprint.
+
+Start with a **single-receptor smoke** first:
+
+```bash
+head -2 receptors.csv > smoke.csv && python3 run_batch.py --receptors smoke.csv ...
+```
+
+### 3. Validate
+
+```bash
+python3 validate_outputs.py --stilt-wd /root/autodl-tmp/stilt \
+    --out-report /root/autodl-tmp/stilt_validation.json
+```
+
+Pass rate must be ≥95% before ingestion.
+
+## Not yet implemented
+
+* `foot.rds` -> `data_builder.py` schema-v5 ingestion (needs real footprints
+  to design against; do NOT reuse the probability-normalized shape loss)
+* trajectory `.rds` -> Lagrangian-JEPA `traj_xy` cache adapter

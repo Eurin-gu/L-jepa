@@ -1,0 +1,15 @@
+Some converters require the NetCDF library (version 3 or 4) or
+ECMWF eccodes library. Check README.md to see if which converters
+require either of these libraries.
+
+Create the Makefile.inc file that declares compiler and linker
+options that may differ from computer to computer. A sample file
+using GNU compilers is included: see Makefile.inc.gfortran. It may
+be coped as Makefile.inc and modified to match your computer.
+
+Locations of NetCDF library, EMCWF eccodes library, and their
+header files should be declared by Makefile.inc.
+
+Before building any converter, compile the hysplit library in the metprog
+directory. This is done by changing directory to metprog/library and running
+the make command there.

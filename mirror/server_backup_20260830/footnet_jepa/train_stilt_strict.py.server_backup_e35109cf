@@ -1,0 +1,345 @@
+#!/usr/bin/env python3
+"""Leakage-resistant Scratch/E-JEPA/L-JEPA protocol for STILT footprints."""
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+
+import numpy as np
+import torch
+
+import config as C
+from lagrangian_jepa import input_wind_trajectory
+from models import HighResEncoder, HighResPlainUNet
+from provenance import atomic_json, source_fingerprint
+from train import (evaluate_model, metrics, set_seed, train_jepa,
+                   train_lagrangian_jepa, train_supervised)
+
+
+def _find_array(data_dir: Path, short_name: str, canonical_suffix: str) -> Path:
+    direct = data_dir / f"{short_name}.npy"
+    if direct.is_file():
+        return direct
+    matches = sorted(data_dir.glob(f"*_{canonical_suffix}.npy"))
+    if len(matches) != 1:
+        raise FileNotFoundError(
+            f"expected {direct} or one *_{canonical_suffix}.npy in {data_dir}")
+    return matches[0]
+
+
+def load_dataset(data_dir: Path) -> dict:
+    x_path = _find_array(data_dir, "x", "inputs")
+    y_path = _find_array(data_dir, "y", "targets")
+    meta_path = data_dir / "meta.json"
+    if not meta_path.is_file():
+        candidates = sorted(data_dir.glob("*_meta.json"))
+        if len(candidates) != 1:
+            raise FileNotFoundError(f"expected one metadata JSON in {data_dir}")
+        meta_path = candidates[0]
+    x = np.load(x_path).astype(np.float32)
+    y = np.load(y_path).astype(np.float32)
+    with open(meta_path, encoding="utf-8") as handle:
+        payload = json.load(handle)
+    samples = payload.get("samples") if isinstance(payload, dict) else payload
+    if not isinstance(samples, list) or len(samples) != len(x):
+        raise ValueError("metadata rows do not align with input rows")
+    if x.ndim != 4 or x.shape[1] != C.N_CHANNELS:
+        raise ValueError(f"invalid input shape {x.shape}")
+    if y.shape != (len(x), x.shape[-2], x.shape[-1]):
+        raise ValueError(f"invalid target shape {y.shape}")
+    if not np.isfinite(x).all() or not np.isfinite(y).all() or np.any(y < 0):
+        raise ValueError("dataset contains invalid values")
+    trajectory_path = data_dir / "traj.npy"
+    trajectory = (np.load(trajectory_path).astype(np.float32)
+                  if trajectory_path.is_file() else None)
+    if trajectory is not None and (len(trajectory) != len(x)
+                                   or trajectory.ndim != 3
+                                   or trajectory.shape[-1] != 2):
+        raise ValueError(f"trajectory rows do not align: {trajectory.shape}")
+    return {
+        "x": x, "y": y, "samples": samples, "metadata": payload,
+        "paths": {"x": str(x_path), "y": str(y_path),
+                  "meta": str(meta_path),
+                  "trajectory": str(trajectory_path) if trajectory is not None else None},
+        "trajectory": trajectory,
+    }
+
+
+def sample_date(sample: dict) -> str:
+    return str(sample["snapshot"])[:8]
+
+
+def geometry_key(sample: dict, block_deg: float = 0.1) -> str:
+    latitude = sample.get("latitude", sample.get("lat"))
+    longitude = sample.get("longitude", sample.get("lon"))
+    if latitude is None or longitude is None:
+        raise ValueError("sample metadata lacks receptor latitude/longitude")
+    latitude, longitude = float(latitude), float(longitude)
+    if block_deg <= 0:
+        return f"{latitude:.5f},{longitude:.5f}"
+    lat_block = math.floor(latitude / block_deg)
+    lon_block = math.floor(longitude / block_deg)
+    return f"tile:{block_deg:g}:{lat_block}:{lon_block}"
+
+
+def _parse_dates(value: str | None) -> list[str] | None:
+    return None if value is None else [item for item in value.split(",") if item]
+
+
+def make_strict_split(samples, train_dates=None, val_dates=None,
+                      test_dates=None, geometry_holdout=0.2,
+                      geometry_block_deg=0.1, seed=20260824):
+    dates = sorted({sample_date(sample) for sample in samples})
+    if train_dates is None and val_dates is None and test_dates is None:
+        if len(dates) < 4:
+            raise ValueError("strict date split needs at least four dates")
+        train_dates, val_dates, test_dates = dates[:-3], dates[-3:-2], dates[-2:]
+    elif None in (train_dates, val_dates, test_dates):
+        raise ValueError("provide train, validation, and test dates together")
+    train_dates, val_dates, test_dates = map(set, (train_dates, val_dates, test_dates))
+    if train_dates & val_dates or train_dates & test_dates or val_dates & test_dates:
+        raise ValueError("train/validation/test dates must be disjoint")
+    unknown = (train_dates | val_dates | test_dates).difference(dates)
+    if unknown:
+        raise ValueError(f"split dates absent from dataset: {sorted(unknown)}")
+
+    geometries = sorted({geometry_key(sample, geometry_block_deg)
+                         for sample in samples})
+    rng = np.random.RandomState(seed)
+    shuffled = np.asarray(geometries, dtype=object)[rng.permutation(len(geometries))]
+    if geometry_holdout > 0:
+        if not 0 < geometry_holdout < 0.5:
+            raise ValueError("geometry_holdout must be 0 or in (0, 0.5)")
+        n_each = max(1, int(round(len(geometries) * geometry_holdout)))
+        if 2 * n_each >= len(geometries):
+            raise ValueError("too few geometries for disjoint train/val/test groups")
+        test_geometry = set(shuffled[:n_each])
+        val_geometry = set(shuffled[n_each:2 * n_each])
+        train_geometry = set(shuffled[2 * n_each:])
+    else:
+        train_geometry = val_geometry = test_geometry = set(geometries)
+
+    roles = {
+        "train": (train_dates, train_geometry),
+        "validation": (val_dates, val_geometry),
+        "test": (test_dates, test_geometry),
+    }
+    indices = {}
+    for role, (role_dates, role_geometry) in roles.items():
+        indices[role] = np.asarray([
+            index for index, sample in enumerate(samples)
+            if sample_date(sample) in role_dates
+            and geometry_key(sample, geometry_block_deg) in role_geometry
+        ], dtype=np.int64)
+        if not len(indices[role]):
+            raise ValueError(f"{role} split is empty")
+    if set(indices["train"]) & set(indices["validation"]) \
+            or set(indices["train"]) & set(indices["test"]) \
+            or set(indices["validation"]) & set(indices["test"]):
+        raise AssertionError("split indices overlap")
+    return indices, {
+        "dates": {role: sorted(role_dates)
+                  for role, (role_dates, _) in roles.items()},
+        "geometry_counts": {role: len(role_geometry)
+                            for role, (_, role_geometry) in roles.items()},
+        "geometry_overlap_allowed": geometry_holdout == 0,
+        "geometry_holdout_fraction": geometry_holdout,
+        "geometry_block_degrees": geometry_block_deg,
+        "unused_samples": len(samples) - sum(map(len, indices.values())),
+    }
+
+
+def state_fingerprint(state: dict[str, torch.Tensor]) -> str:
+    digest = hashlib.sha256()
+    for key, value in sorted(state.items()):
+        digest.update(key.encode("utf-8"))
+        digest.update(value.detach().cpu().contiguous().numpy().tobytes())
+    return digest.hexdigest()
+
+
+def initialise_template(seed: int, in_channels: int, base: int,
+                        target_mean: float) -> tuple[dict, str]:
+    set_seed(seed)
+    model = HighResPlainUNet(in_channels=in_channels, base=base)
+    # The shared training-only bias avoids starting softplus at 0.693 for a
+    # target whose typical pixel amplitude is near 1e-3.
+    bias = math.log(math.expm1(max(target_mean, 1e-8)))
+    with torch.no_grad():
+        model.decoder.final.bias.fill_(bias)
+    state = copy.deepcopy(model.state_dict())
+    return state, state_fingerprint(state)
+
+
+def summarize_seed_metrics(seed_results: dict) -> dict:
+    output = {}
+    arms = sorted(next(iter(seed_results.values())))
+    for arm in arms:
+        rows = [seed_results[str(seed)][arm]["test"]["overall"]
+                for seed in sorted(map(int, seed_results))]
+        output[arm] = {
+            key: {"mean": float(np.nanmean([row[key] for row in rows])),
+                  "std": float(np.nanstd([row[key] for row in rows]))}
+            for key in rows[0] if key != "n_events"
+        }
+    return output
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data", required=True)
+    parser.add_argument("--out", required=True)
+    parser.add_argument("--train-dates")
+    parser.add_argument("--val-dates")
+    parser.add_argument("--test-dates")
+    parser.add_argument("--geometry-holdout", type=float, default=0.2)
+    parser.add_argument("--geometry-block-deg", type=float, default=0.1,
+                        help="hold out complete lat/lon tiles, not just exact points")
+    parser.add_argument("--trajectory-source",
+                        choices=("input_wind", "stilt_privileged"),
+                        default="input_wind")
+    parser.add_argument("--test-status", choices=("reused", "untouched"),
+                        default="reused")
+    parser.add_argument("--seeds", default="0,1,2,3,4")
+    parser.add_argument("--epochs", type=int, default=60)
+    parser.add_argument("--pretrain-epochs", type=int, default=25)
+    parser.add_argument("--batch", type=int, default=16)
+    parser.add_argument("--base", type=int, default=8)
+    parser.add_argument("--arms", default="scratch,e_jepa,l_jepa")
+    parser.add_argument("--device", default=C.DEVICE)
+    args = parser.parse_args()
+    if min(args.epochs, args.pretrain_epochs, args.batch, args.base) < 1:
+        parser.error("epoch, batch, and base values must be positive")
+
+    dataset = load_dataset(Path(args.data))
+    split, split_meta = make_strict_split(
+        dataset["samples"], _parse_dates(args.train_dates),
+        _parse_dates(args.val_dates), _parse_dates(args.test_dates),
+        args.geometry_holdout, args.geometry_block_deg,
+    )
+    x, y = dataset["x"], dataset["y"]
+    train_idx, val_idx, test_idx = (split["train"], split["validation"],
+                                    split["test"])
+    trajectories = None
+    trajectory_policy = {
+        "source": args.trajectory_source,
+        "available_at_deployment": args.trajectory_source == "input_wind",
+        "derived_from_same_stilt_solve_as_label":
+            args.trajectory_source == "stilt_privileged",
+    }
+    if args.trajectory_source == "input_wind":
+        trajectories = input_wind_trajectory(x)
+    else:
+        trajectories = dataset["trajectory"]
+        if trajectories is None:
+            raise ValueError("stilt_privileged requires traj.npy")
+
+    metadata = dataset["metadata"] if isinstance(dataset["metadata"], dict) else {}
+    meteorology = metadata.get("contract", {}).get("meteorology") or {}
+    alignment = meteorology.get("alignment", "unknown_or_legacy_not_same_cycle")
+    arms = [item for item in args.arms.split(",") if item]
+    unknown_arms = set(arms).difference({"scratch", "e_jepa", "l_jepa"})
+    if unknown_arms:
+        parser.error(f"unknown arms: {sorted(unknown_arms)}")
+
+    seed_results = {}
+    for seed in [int(item) for item in args.seeds.split(",")]:
+        initial_state, initial_hash = initialise_template(
+            seed, x.shape[1], args.base, float(y[train_idx].mean()))
+        arm_results = {}
+        for arm in arms:
+            model = HighResPlainUNet(in_channels=x.shape[1], base=args.base)
+            model.load_state_dict(initial_state)
+            pretrain_history = None
+            if arm == "e_jepa":
+                encoder = HighResEncoder(in_channels=x.shape[1], base=args.base)
+                encoder.load_state_dict(model.encoder.state_dict())
+                set_seed(seed)
+                encoder, pretrain_history = train_jepa(
+                    encoder, x[train_idx], args.pretrain_epochs, C.LR_JEPA,
+                    args.batch, seed, args.device, mask_grid=x.shape[-1] // 4)
+                model.encoder.load_state_dict(encoder.state_dict())
+            elif arm == "l_jepa":
+                encoder = HighResEncoder(in_channels=x.shape[1], base=args.base)
+                encoder.load_state_dict(model.encoder.state_dict())
+                set_seed(seed)
+                encoder, pretrain_history = train_lagrangian_jepa(
+                    encoder, x[train_idx], trajectories[train_idx],
+                    args.pretrain_epochs, C.LR_JEPA, args.batch, seed,
+                    args.device, predictor_kind="transformer")
+                model.encoder.load_state_dict(encoder.state_dict())
+
+            # Every arm receives identical supervised stochastic state, data
+            # order, optimizer, budget, decoder initialization, and validation.
+            supervised_seed = seed + 100_000
+            set_seed(supervised_seed)
+            model, history = train_supervised(
+                model, x[train_idx], y[train_idx, None],
+                x[val_idx], y[val_idx, None], args.epochs, C.LR,
+                args.batch, arm, supervised_seed, args.device,
+                target_mode=C.TARGET_MODE_PHYSICAL)
+            arm_results[arm] = {
+                "initial_state_sha256": initial_hash,
+                "pretrain_history": pretrain_history,
+                "supervised_history": history,
+                "test": evaluate_model(
+                    model, x[test_idx], y[test_idx, None], args.batch,
+                    args.device, [dataset["samples"][i] for i in test_idx],
+                    target_mode=C.TARGET_MODE_PHYSICAL),
+            }
+        seed_results[str(seed)] = arm_results
+
+    zero_prediction = np.zeros_like(y[test_idx])
+    mean_prediction = np.broadcast_to(
+        y[train_idx].mean(axis=0), y[test_idx].shape).copy()
+    baselines = {
+        "zero": metrics(zero_prediction, y[test_idx]),
+        "train_mean": metrics(mean_prediction, y[test_idx]),
+    }
+    summary = summarize_seed_metrics(seed_results)
+    baseline_mse = baselines["train_mean"]["raw_mse"]
+    baseline_gate = {
+        arm: values["raw_mse"]["mean"] < baseline_mse
+        for arm, values in summary.items()
+    }
+    formal_eligible = (
+        args.test_status == "untouched"
+        and len(split_meta["dates"]["test"]) >= C.MIN_FORMAL_TEST_DATES
+        and not split_meta["geometry_overlap_allowed"]
+        and alignment == "same_cycle_forecast_realization"
+        and args.trajectory_source == "input_wind"
+    )
+    result = {
+        "protocol_version": 1,
+        "data_paths": dataset["paths"],
+        "source_fingerprint": source_fingerprint(),
+        "split": split_meta,
+        "split_indices": {key: value.tolist() for key, value in split.items()},
+        "meteorology_alignment": alignment,
+        "trajectory_policy": trajectory_policy,
+        "test_status": args.test_status,
+        "formal_eligible": formal_eligible,
+        "formal_blockers": [] if formal_eligible else [
+            "current test is exploratory/reused, has fewer than five dates, "
+            "or lacks strict same-cycle/geometry/deployment alignment"],
+        "baselines": baselines,
+        "baseline_gate_train_mean": baseline_gate,
+        "seeds": seed_results,
+        "summary": summary,
+    }
+    atomic_json(args.out, result)
+    print(json.dumps({
+        "formal_eligible": formal_eligible,
+        "split_sizes": {key: len(value) for key, value in split.items()},
+        "train_mean_raw_mse": baseline_mse,
+        "baseline_gate": baseline_gate,
+        "summary": summary,
+    }, indent=2))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,15 @@
+{
+  "date": "20160615",
+  "source_type": "npz_hrrr",
+  "directory": "/mnt/d/lagrangian-jepa-cn/reuse_stilt/server_backup_20260830/hrrr_stilt_production_v1/train_p250/20160615/model_features",
+  "params": {
+    "file_prefix": "a",
+    "file_suffix": "_f00.npz"
+  },
+  "fields": [
+    "U10M",
+    "V10M",
+    "PBLH",
+    "PRSS"
+  ]
+}

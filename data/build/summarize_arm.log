@@ -1,0 +1,19 @@
+train_p250 20160428 PASS None None
+train_p250 20160523 PASS None None
+train_p250 20160615 PASS None None
+train_p250 20160901 PASS None None
+train_p250 20161021 PASS None None
+train_p250 20170314 PASS None None
+train_p250 20170429 PASS None None
+train_p250 20170611 PASS None None
+train_p250 20171006 PASS None None
+train_p250 20171118 PASS None None
+validation_p1000 20160715 PASS None None
+validation_p1000 20170517 PASS None None
+formal_test_p1000 20160318 PASS None None
+formal_test_p1000 20160802 PASS None None
+formal_test_p1000 20161111 PASS None None
+formal_test_p1000 20170116 PASS None None
+formal_test_p1000 20170922 PASS None None
+train_p250_merged all PASS None None
+summary files written

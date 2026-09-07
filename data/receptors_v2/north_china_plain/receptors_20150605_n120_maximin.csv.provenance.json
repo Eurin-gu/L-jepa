@@ -1,0 +1,1248 @@
+{
+  "output": {
+    "path": "D:\\lagrangian-jepa-cn\\data\\receptors_v2\\north_china_plain\\receptors_20150605_n120_maximin.csv",
+    "receptor_height_agl_m": 5.0,
+    "sha256": "52707ffe623fddb684ddaa7d7010401b8f09ed423771ee3be18ed6ac01529d98"
+  },
+  "quality_control": {
+    "bounding_box_inclusive": {
+      "latitude": [
+        38.2,
+        41.0
+      ],
+      "longitude": [
+        114.2,
+        117.6
+      ]
+    },
+    "counts": {
+      "candidates_in_box": 215,
+      "finite": 199280,
+      "quality_flag_zero": 119129,
+      "source": 199280,
+      "xco2_range": 119129
+    },
+    "required_flag": "xco2_quality_flag == 0",
+    "xco2_ppm_range_exclusive": [
+      350.0,
+      450.0
+    ]
+  },
+  "sampling": {
+    "requested": 120,
+    "seed": 20260822,
+    "selected": 120,
+    "space_coordinates": "local_east_north_km_scaled_by_common_spatial_span",
+    "strategy": "maximin",
+    "time_coordinate": "source_time_scaled_to_unit_span",
+    "time_weight": 1.0
+  },
+  "schema_version": 1,
+  "selected_soundings": [
+    {
+      "csv_row": 0,
+      "latitude": 38.22990798950195,
+      "longitude": 115.53067779541016,
+      "run_time": "2015-06-05T05:21:06Z",
+      "selection_rank": 1,
+      "sounding_id": "2015060505210633",
+      "source_index": 55817,
+      "xco2_ppm": 399.84259033203125
+    },
+    {
+      "csv_row": 1,
+      "latitude": 38.332275390625,
+      "longitude": 115.49625396728516,
+      "run_time": "2015-06-05T05:21:07Z",
+      "selection_rank": 13,
+      "sounding_id": "2015060505210802",
+      "source_index": 55856,
+      "xco2_ppm": 400.1156005859375
+    },
+    {
+      "csv_row": 2,
+      "latitude": 38.467552185058594,
+      "longitude": 115.447998046875,
+      "run_time": "2015-06-05T05:21:11Z",
+      "selection_rank": 5,
+      "sounding_id": "2015060505211105",
+      "source_index": 55931,
+      "xco2_ppm": 400.5102844238281
+    },
+    {
+      "csv_row": 3,
+      "latitude": 39.79568099975586,
+      "longitude": 114.98767852783203,
+      "run_time": "2015-06-05T05:21:34Z",
+      "selection_rank": 4,
+      "sounding_id": "2015060505213431",
+      "source_index": 56191,
+      "xco2_ppm": 400.63336181640625
+    },
+    {
+      "csv_row": 4,
+      "latitude": 39.833030700683594,
+      "longitude": 114.97539520263672,
+      "run_time": "2015-06-05T05:21:34Z",
+      "selection_rank": 30,
+      "sounding_id": "2015060505213501",
+      "source_index": 56203,
+      "xco2_ppm": 402.23333740234375
+    },
+    {
+      "csv_row": 5,
+      "latitude": 39.80229949951172,
+      "longitude": 114.98635864257812,
+      "run_time": "2015-06-05T05:21:34Z",
+      "selection_rank": 89,
+      "sounding_id": "2015060505213504",
+      "source_index": 56205,
+      "xco2_ppm": 400.34423828125
+    },
+    {
+      "csv_row": 6,
+      "latitude": 39.79087448120117,
+      "longitude": 114.99117279052734,
+      "run_time": "2015-06-05T05:21:35Z",
+      "selection_rank": 36,
+      "sounding_id": "2015060505213537",
+      "source_index": 56214,
+      "xco2_ppm": 401.9638366699219
+    },
+    {
+      "csv_row": 7,
+      "latitude": 39.809051513671875,
+      "longitude": 114.98448181152344,
+      "run_time": "2015-06-05T05:21:35Z",
+      "selection_rank": 97,
+      "sounding_id": "2015060505213577",
+      "source_index": 56218,
+      "xco2_ppm": 400.6670837402344
+    },
+    {
+      "csv_row": 8,
+      "latitude": 39.817291259765625,
+      "longitude": 114.98146057128906,
+      "run_time": "2015-06-05T05:21:36Z",
+      "selection_rank": 15,
+      "sounding_id": "2015060505213608",
+      "source_index": 56221,
+      "xco2_ppm": 401.6141052246094
+    },
+    {
+      "csv_row": 9,
+      "latitude": 39.94212341308594,
+      "longitude": 114.93486022949219,
+      "run_time": "2015-06-05T05:21:36Z",
+      "selection_rank": 47,
+      "sounding_id": "2015060505213701",
+      "source_index": 56228,
+      "xco2_ppm": 401.6642761230469
+    },
+    {
+      "csv_row": 10,
+      "latitude": 39.9603385925293,
+      "longitude": 114.92816925048828,
+      "run_time": "2015-06-05T05:21:37Z",
+      "selection_rank": 76,
+      "sounding_id": "2015060505213731",
+      "source_index": 56231,
+      "xco2_ppm": 401.4896240234375
+    },
+    {
+      "csv_row": 11,
+      "latitude": 39.939083099365234,
+      "longitude": 114.93800354003906,
+      "run_time": "2015-06-05T05:21:37Z",
+      "selection_rank": 8,
+      "sounding_id": "2015060505213775",
+      "source_index": 56241,
+      "xco2_ppm": 404.1095886230469
+    },
+    {
+      "csv_row": 12,
+      "latitude": 39.99677276611328,
+      "longitude": 114.91463470458984,
+      "run_time": "2015-06-05T05:21:37Z",
+      "selection_rank": 71,
+      "sounding_id": "2015060505213801",
+      "source_index": 56243,
+      "xco2_ppm": 399.8341064453125
+    },
+    {
+      "csv_row": 13,
+      "latitude": 39.96710968017578,
+      "longitude": 114.92721557617188,
+      "run_time": "2015-06-05T05:21:37Z",
+      "selection_rank": 58,
+      "sounding_id": "2015060505213804",
+      "source_index": 56246,
+      "xco2_ppm": 400.8405456542969
+    },
+    {
+      "csv_row": 14,
+      "latitude": 40.0151252746582,
+      "longitude": 114.90802001953125,
+      "run_time": "2015-06-05T05:21:38Z",
+      "selection_rank": 25,
+      "sounding_id": "2015060505213831",
+      "source_index": 56251,
+      "xco2_ppm": 400.6153259277344
+    },
+    {
+      "csv_row": 15,
+      "latitude": 39.945533752441406,
+      "longitude": 114.93572998046875,
+      "run_time": "2015-06-05T05:21:38Z",
+      "selection_rank": 51,
+      "sounding_id": "2015060505213838",
+      "source_index": 56258,
+      "xco2_ppm": 401.044189453125
+    },
+    {
+      "csv_row": 16,
+      "latitude": 39.983768463134766,
+      "longitude": 114.9216079711914,
+      "run_time": "2015-06-05T05:21:38Z",
+      "selection_rank": 49,
+      "sounding_id": "2015060505213876",
+      "source_index": 56264,
+      "xco2_ppm": 399.28607177734375
+    },
+    {
+      "csv_row": 17,
+      "latitude": 40.02211380004883,
+      "longitude": 114.90733337402344,
+      "run_time": "2015-06-05T05:21:38Z",
+      "selection_rank": 88,
+      "sounding_id": "2015060505213904",
+      "source_index": 56270,
+      "xco2_ppm": 401.06304931640625
+    },
+    {
+      "csv_row": 18,
+      "latitude": 40.0020637512207,
+      "longitude": 114.9149398803711,
+      "run_time": "2015-06-05T05:21:39Z",
+      "selection_rank": 111,
+      "sounding_id": "2015060505213906",
+      "source_index": 56272,
+      "xco2_ppm": 399.9134826660156
+    },
+    {
+      "csv_row": 19,
+      "latitude": 40.010433197021484,
+      "longitude": 114.9121322631836,
+      "run_time": "2015-06-05T05:21:39Z",
+      "selection_rank": 14,
+      "sounding_id": "2015060505213937",
+      "source_index": 56281,
+      "xco2_ppm": 399.9287109375
+    },
+    {
+      "csv_row": 20,
+      "latitude": 40.08918762207031,
+      "longitude": 114.88226318359375,
+      "run_time": "2015-06-05T05:21:39Z",
+      "selection_rank": 24,
+      "sounding_id": "2015060505213971",
+      "source_index": 56283,
+      "xco2_ppm": 399.6996154785156
+    },
+    {
+      "csv_row": 21,
+      "latitude": 40.018733978271484,
+      "longitude": 114.9092025756836,
+      "run_time": "2015-06-05T05:21:39Z",
+      "selection_rank": 96,
+      "sounding_id": "2015060505213978",
+      "source_index": 56290,
+      "xco2_ppm": 401.1195373535156
+    },
+    {
+      "csv_row": 22,
+      "latitude": 40.10778045654297,
+      "longitude": 114.87592315673828,
+      "run_time": "2015-06-05T05:21:39Z",
+      "selection_rank": 64,
+      "sounding_id": "2015060505214001",
+      "source_index": 56291,
+      "xco2_ppm": 400.8680419921875
+    },
+    {
+      "csv_row": 23,
+      "latitude": 40.067501068115234,
+      "longitude": 114.89176940917969,
+      "run_time": "2015-06-05T05:21:40Z",
+      "selection_rank": 66,
+      "sounding_id": "2015060505214005",
+      "source_index": 56295,
+      "xco2_ppm": 399.5995788574219
+    },
+    {
+      "csv_row": 24,
+      "latitude": 40.08601760864258,
+      "longitude": 114.88536834716797,
+      "run_time": "2015-06-05T05:21:40Z",
+      "selection_rank": 54,
+      "sounding_id": "2015060505214035",
+      "source_index": 56303,
+      "xco2_ppm": 401.56085205078125
+    },
+    {
+      "csv_row": 25,
+      "latitude": 40.13465881347656,
+      "longitude": 114.86699676513672,
+      "run_time": "2015-06-05T05:21:40Z",
+      "selection_rank": 106,
+      "sounding_id": "2015060505214072",
+      "source_index": 56308,
+      "xco2_ppm": 400.5133361816406
+    },
+    {
+      "csv_row": 26,
+      "latitude": 40.11460494995117,
+      "longitude": 114.87517547607422,
+      "run_time": "2015-06-05T05:21:40Z",
+      "selection_rank": 0,
+      "sounding_id": "2015060505214074",
+      "source_index": 56310,
+      "xco2_ppm": 400.9012756347656
+    },
+    {
+      "csv_row": 27,
+      "latitude": 40.14315414428711,
+      "longitude": 114.86470794677734,
+      "run_time": "2015-06-05T05:21:40Z",
+      "selection_rank": 53,
+      "sounding_id": "2015060505214103",
+      "source_index": 56316,
+      "xco2_ppm": 400.7449645996094
+    },
+    {
+      "csv_row": 28,
+      "latitude": 40.123085021972656,
+      "longitude": 114.87263488769531,
+      "run_time": "2015-06-05T05:21:41Z",
+      "selection_rank": 109,
+      "sounding_id": "2015060505214105",
+      "source_index": 56318,
+      "xco2_ppm": 400.0861511230469
+    },
+    {
+      "csv_row": 29,
+      "latitude": 40.10301208496094,
+      "longitude": 114.8802261352539,
+      "run_time": "2015-06-05T05:21:41Z",
+      "selection_rank": 100,
+      "sounding_id": "2015060505214107",
+      "source_index": 56320,
+      "xco2_ppm": 400.3455505371094
+    },
+    {
+      "csv_row": 30,
+      "latitude": 40.16156005859375,
+      "longitude": 114.85816955566406,
+      "run_time": "2015-06-05T05:21:41Z",
+      "selection_rank": 78,
+      "sounding_id": "2015060505214133",
+      "source_index": 56324,
+      "xco2_ppm": 401.6997985839844
+    },
+    {
+      "csv_row": 31,
+      "latitude": 40.14152908325195,
+      "longitude": 114.86614990234375,
+      "run_time": "2015-06-05T05:21:41Z",
+      "selection_rank": 112,
+      "sounding_id": "2015060505214135",
+      "source_index": 56325,
+      "xco2_ppm": 402.5438537597656
+    },
+    {
+      "csv_row": 32,
+      "latitude": 40.11125564575195,
+      "longitude": 114.87728118896484,
+      "run_time": "2015-06-05T05:21:41Z",
+      "selection_rank": 73,
+      "sounding_id": "2015060505214138",
+      "source_index": 56328,
+      "xco2_ppm": 400.718505859375
+    },
+    {
+      "csv_row": 33,
+      "latitude": 40.179508209228516,
+      "longitude": 114.85103607177734,
+      "run_time": "2015-06-05T05:21:41Z",
+      "selection_rank": 16,
+      "sounding_id": "2015060505214173",
+      "source_index": 56331,
+      "xco2_ppm": 401.8221435546875
+    },
+    {
+      "csv_row": 34,
+      "latitude": 40.12958526611328,
+      "longitude": 114.87063598632812,
+      "run_time": "2015-06-05T05:21:41Z",
+      "selection_rank": 31,
+      "sounding_id": "2015060505214178",
+      "source_index": 56336,
+      "xco2_ppm": 401.572998046875
+    },
+    {
+      "csv_row": 35,
+      "latitude": 40.197845458984375,
+      "longitude": 114.8443374633789,
+      "run_time": "2015-06-05T05:21:41Z",
+      "selection_rank": 90,
+      "sounding_id": "2015060505214203",
+      "source_index": 56339,
+      "xco2_ppm": 402.7864685058594
+    },
+    {
+      "csv_row": 36,
+      "latitude": 40.14828109741211,
+      "longitude": 114.8644027709961,
+      "run_time": "2015-06-05T05:21:42Z",
+      "selection_rank": 75,
+      "sounding_id": "2015060505214208",
+      "source_index": 56344,
+      "xco2_ppm": 401.2545166015625
+    },
+    {
+      "csv_row": 37,
+      "latitude": 40.206298828125,
+      "longitude": 114.84193420410156,
+      "run_time": "2015-06-05T05:21:42Z",
+      "selection_rank": 48,
+      "sounding_id": "2015060505214234",
+      "source_index": 56348,
+      "xco2_ppm": 403.2138366699219
+    },
+    {
+      "csv_row": 38,
+      "latitude": 40.166561126708984,
+      "longitude": 114.85770416259766,
+      "run_time": "2015-06-05T05:21:42Z",
+      "selection_rank": 38,
+      "sounding_id": "2015060505214238",
+      "source_index": 56352,
+      "xco2_ppm": 401.28875732421875
+    },
+    {
+      "csv_row": 39,
+      "latitude": 40.18451690673828,
+      "longitude": 114.8506851196289,
+      "run_time": "2015-06-05T05:21:42Z",
+      "selection_rank": 79,
+      "sounding_id": "2015060505214278",
+      "source_index": 56359,
+      "xco2_ppm": 401.7449951171875
+    },
+    {
+      "csv_row": 40,
+      "latitude": 40.27231979370117,
+      "longitude": 114.8152847290039,
+      "run_time": "2015-06-05T05:21:42Z",
+      "selection_rank": 32,
+      "sounding_id": "2015060505214301",
+      "source_index": 56360,
+      "xco2_ppm": 402.9984130859375
+    },
+    {
+      "csv_row": 41,
+      "latitude": 40.222740173339844,
+      "longitude": 114.83629608154297,
+      "run_time": "2015-06-05T05:21:43Z",
+      "selection_rank": 9,
+      "sounding_id": "2015060505214306",
+      "source_index": 56365,
+      "xco2_ppm": 402.7629699707031
+    },
+    {
+      "csv_row": 42,
+      "latitude": 40.23963928222656,
+      "longitude": 114.8309326171875,
+      "run_time": "2015-06-05T05:21:43Z",
+      "selection_rank": 41,
+      "sounding_id": "2015060505214378",
+      "source_index": 56381,
+      "xco2_ppm": 402.8310852050781
+    },
+    {
+      "csv_row": 43,
+      "latitude": 40.3276252746582,
+      "longitude": 114.79551696777344,
+      "run_time": "2015-06-05T05:21:43Z",
+      "selection_rank": 99,
+      "sounding_id": "2015060505214401",
+      "source_index": 56382,
+      "xco2_ppm": 402.072998046875
+    },
+    {
+      "csv_row": 44,
+      "latitude": 40.307552337646484,
+      "longitude": 114.80389404296875,
+      "run_time": "2015-06-05T05:21:43Z",
+      "selection_rank": 22,
+      "sounding_id": "2015060505214403",
+      "source_index": 56384,
+      "xco2_ppm": 400.896484375
+    },
+    {
+      "csv_row": 45,
+      "latitude": 40.34615707397461,
+      "longitude": 114.78899383544922,
+      "run_time": "2015-06-05T05:21:44Z",
+      "selection_rank": 72,
+      "sounding_id": "2015060505214431",
+      "source_index": 56389,
+      "xco2_ppm": 400.1076965332031
+    },
+    {
+      "csv_row": 46,
+      "latitude": 40.316070556640625,
+      "longitude": 114.80155944824219,
+      "run_time": "2015-06-05T05:21:44Z",
+      "selection_rank": 95,
+      "sounding_id": "2015060505214434",
+      "source_index": 56392,
+      "xco2_ppm": 401.57720947265625
+    },
+    {
+      "csv_row": 47,
+      "latitude": 40.364410400390625,
+      "longitude": 114.78218078613281,
+      "run_time": "2015-06-05T05:21:44Z",
+      "selection_rank": 7,
+      "sounding_id": "2015060505214471",
+      "source_index": 56397,
+      "xco2_ppm": 401.4182434082031
+    },
+    {
+      "csv_row": 48,
+      "latitude": 40.324459075927734,
+      "longitude": 114.79898834228516,
+      "run_time": "2015-06-05T05:21:44Z",
+      "selection_rank": 44,
+      "sounding_id": "2015060505214475",
+      "source_index": 56401,
+      "xco2_ppm": 400.41827392578125
+    },
+    {
+      "csv_row": 49,
+      "latitude": 40.372928619384766,
+      "longitude": 114.780029296875,
+      "run_time": "2015-06-05T05:21:44Z",
+      "selection_rank": 108,
+      "sounding_id": "2015060505214502",
+      "source_index": 56406,
+      "xco2_ppm": 400.5069274902344
+    },
+    {
+      "csv_row": 50,
+      "latitude": 40.35297393798828,
+      "longitude": 114.78858184814453,
+      "run_time": "2015-06-05T05:21:44Z",
+      "selection_rank": 87,
+      "sounding_id": "2015060505214504",
+      "source_index": 56408,
+      "xco2_ppm": 401.28753662109375
+    },
+    {
+      "csv_row": 51,
+      "latitude": 40.3713264465332,
+      "longitude": 114.78199005126953,
+      "run_time": "2015-06-05T05:21:45Z",
+      "selection_rank": 86,
+      "sounding_id": "2015060505214534",
+      "source_index": 56416,
+      "xco2_ppm": 401.7105407714844
+    },
+    {
+      "csv_row": 52,
+      "latitude": 40.35970687866211,
+      "longitude": 114.78746032714844,
+      "run_time": "2015-06-05T05:21:45Z",
+      "selection_rank": 39,
+      "sounding_id": "2015060505214577",
+      "source_index": 56425,
+      "xco2_ppm": 401.20245361328125
+    },
+    {
+      "csv_row": 53,
+      "latitude": 40.438133239746094,
+      "longitude": 114.75613403320312,
+      "run_time": "2015-06-05T05:21:45Z",
+      "selection_rank": 67,
+      "sounding_id": "2015060505214601",
+      "source_index": 56427,
+      "xco2_ppm": 400.17559814453125
+    },
+    {
+      "csv_row": 54,
+      "latitude": 40.39818572998047,
+      "longitude": 114.77308654785156,
+      "run_time": "2015-06-05T05:21:46Z",
+      "selection_rank": 17,
+      "sounding_id": "2015060505214605",
+      "source_index": 56429,
+      "xco2_ppm": 399.3024597167969
+    },
+    {
+      "csv_row": 55,
+      "latitude": 40.368011474609375,
+      "longitude": 114.78475952148438,
+      "run_time": "2015-06-05T05:21:46Z",
+      "selection_rank": 98,
+      "sounding_id": "2015060505214608",
+      "source_index": 56432,
+      "xco2_ppm": 401.1781005859375
+    },
+    {
+      "csv_row": 56,
+      "latitude": 40.4566764831543,
+      "longitude": 114.74977111816406,
+      "run_time": "2015-06-05T05:21:46Z",
+      "selection_rank": 26,
+      "sounding_id": "2015060505214631",
+      "source_index": 56433,
+      "xco2_ppm": 401.0547180175781
+    },
+    {
+      "csv_row": 57,
+      "latitude": 40.47511672973633,
+      "longitude": 114.74324798583984,
+      "run_time": "2015-06-05T05:21:46Z",
+      "selection_rank": 101,
+      "sounding_id": "2015060505214671",
+      "source_index": 56439,
+      "xco2_ppm": 400.78326416015625
+    },
+    {
+      "csv_row": 58,
+      "latitude": 40.4552116394043,
+      "longitude": 114.75196075439453,
+      "run_time": "2015-06-05T05:21:46Z",
+      "selection_rank": 114,
+      "sounding_id": "2015060505214673",
+      "source_index": 56441,
+      "xco2_ppm": 401.4683532714844
+    },
+    {
+      "csv_row": 59,
+      "latitude": 40.435184478759766,
+      "longitude": 114.76025390625,
+      "run_time": "2015-06-05T05:21:46Z",
+      "selection_rank": 56,
+      "sounding_id": "2015060505214675",
+      "source_index": 56443,
+      "xco2_ppm": 399.4630126953125
+    },
+    {
+      "csv_row": 60,
+      "latitude": 40.483612060546875,
+      "longitude": 114.74105072021484,
+      "run_time": "2015-06-05T05:21:46Z",
+      "selection_rank": 33,
+      "sounding_id": "2015060505214702",
+      "source_index": 56446,
+      "xco2_ppm": 401.059326171875
+    },
+    {
+      "csv_row": 61,
+      "latitude": 40.50199890136719,
+      "longitude": 114.73443603515625,
+      "run_time": "2015-06-05T05:21:47Z",
+      "selection_rank": 77,
+      "sounding_id": "2015060505214732",
+      "source_index": 56453,
+      "xco2_ppm": 401.96502685546875
+    },
+    {
+      "csv_row": 62,
+      "latitude": 40.472312927246094,
+      "longitude": 114.74748229980469,
+      "run_time": "2015-06-05T05:21:47Z",
+      "selection_rank": 105,
+      "sounding_id": "2015060505214735",
+      "source_index": 56456,
+      "xco2_ppm": 401.66021728515625
+    },
+    {
+      "csv_row": 63,
+      "latitude": 40.44192886352539,
+      "longitude": 114.75900268554688,
+      "run_time": "2015-06-05T05:21:47Z",
+      "selection_rank": 10,
+      "sounding_id": "2015060505214738",
+      "source_index": 56459,
+      "xco2_ppm": 400.3176574707031
+    },
+    {
+      "csv_row": 64,
+      "latitude": 40.52006149291992,
+      "longitude": 114.72745513916016,
+      "run_time": "2015-06-05T05:21:47Z",
+      "selection_rank": 20,
+      "sounding_id": "2015060505214772",
+      "source_index": 56461,
+      "xco2_ppm": 401.2726135253906
+    },
+    {
+      "csv_row": 65,
+      "latitude": 40.48047637939453,
+      "longitude": 114.74473571777344,
+      "run_time": "2015-06-05T05:21:47Z",
+      "selection_rank": 45,
+      "sounding_id": "2015060505214776",
+      "source_index": 56465,
+      "xco2_ppm": 401.1619873046875
+    },
+    {
+      "csv_row": 66,
+      "latitude": 40.52839279174805,
+      "longitude": 114.72516632080078,
+      "run_time": "2015-06-05T05:21:47Z",
+      "selection_rank": 102,
+      "sounding_id": "2015060505214803",
+      "source_index": 56470,
+      "xco2_ppm": 401.6293640136719
+    },
+    {
+      "csv_row": 67,
+      "latitude": 40.50722122192383,
+      "longitude": 114.73564147949219,
+      "run_time": "2015-06-05T05:21:48Z",
+      "selection_rank": 37,
+      "sounding_id": "2015060505214837",
+      "source_index": 56480,
+      "xco2_ppm": 401.3757629394531
+    },
+    {
+      "csv_row": 68,
+      "latitude": 40.58457946777344,
+      "longitude": 114.70257568359375,
+      "run_time": "2015-06-05T05:21:48Z",
+      "selection_rank": 3,
+      "sounding_id": "2015060505214871",
+      "source_index": 56482,
+      "xco2_ppm": 401.7693176269531
+    },
+    {
+      "csv_row": 69,
+      "latitude": 40.60234832763672,
+      "longitude": 114.6951904296875,
+      "run_time": "2015-06-05T05:21:48Z",
+      "selection_rank": 80,
+      "sounding_id": "2015060505214901",
+      "source_index": 56488,
+      "xco2_ppm": 402.1201171875
+    },
+    {
+      "csv_row": 70,
+      "latitude": 40.53337478637695,
+      "longitude": 114.72575378417969,
+      "run_time": "2015-06-05T05:21:49Z",
+      "selection_rank": 29,
+      "sounding_id": "2015060505214908",
+      "source_index": 56493,
+      "xco2_ppm": 401.2265319824219
+    },
+    {
+      "csv_row": 71,
+      "latitude": 40.62047576904297,
+      "longitude": 114.68824005126953,
+      "run_time": "2015-06-05T05:21:49Z",
+      "selection_rank": 50,
+      "sounding_id": "2015060505214931",
+      "source_index": 56494,
+      "xco2_ppm": 400.5046691894531
+    },
+    {
+      "csv_row": 72,
+      "latitude": 40.60087203979492,
+      "longitude": 114.69750213623047,
+      "run_time": "2015-06-05T05:21:49Z",
+      "selection_rank": 115,
+      "sounding_id": "2015060505214933",
+      "source_index": 56496,
+      "xco2_ppm": 401.53466796875
+    },
+    {
+      "csv_row": 73,
+      "latitude": 40.58946228027344,
+      "longitude": 114.70389556884766,
+      "run_time": "2015-06-05T05:21:49Z",
+      "selection_rank": 43,
+      "sounding_id": "2015060505214976",
+      "source_index": 56504,
+      "xco2_ppm": 401.7815856933594
+    },
+    {
+      "csv_row": 74,
+      "latitude": 40.656982421875,
+      "longitude": 114.67485809326172,
+      "run_time": "2015-06-05T05:21:49Z",
+      "selection_rank": 61,
+      "sounding_id": "2015060505215001",
+      "source_index": 56506,
+      "xco2_ppm": 400.1050109863281
+    },
+    {
+      "csv_row": 75,
+      "latitude": 40.62728500366211,
+      "longitude": 114.68846130371094,
+      "run_time": "2015-06-05T05:21:49Z",
+      "selection_rank": 18,
+      "sounding_id": "2015060505215004",
+      "source_index": 56509,
+      "xco2_ppm": 400.24615478515625
+    },
+    {
+      "csv_row": 76,
+      "latitude": 40.58771896362305,
+      "longitude": 114.70539855957031,
+      "run_time": "2015-06-05T05:21:50Z",
+      "selection_rank": 119,
+      "sounding_id": "2015060505215008",
+      "source_index": 56513,
+      "xco2_ppm": 401.33026123046875
+    },
+    {
+      "csv_row": 77,
+      "latitude": 40.645599365234375,
+      "longitude": 114.68190002441406,
+      "run_time": "2015-06-05T05:21:50Z",
+      "selection_rank": 84,
+      "sounding_id": "2015060505215034",
+      "source_index": 56517,
+      "xco2_ppm": 400.71417236328125
+    },
+    {
+      "csv_row": 78,
+      "latitude": 40.605712890625,
+      "longitude": 114.6985092163086,
+      "run_time": "2015-06-05T05:21:50Z",
+      "selection_rank": 57,
+      "sounding_id": "2015060505215038",
+      "source_index": 56521,
+      "xco2_ppm": 401.57318115234375
+    },
+    {
+      "csv_row": 79,
+      "latitude": 40.693359375,
+      "longitude": 114.66131591796875,
+      "run_time": "2015-06-05T05:21:50Z",
+      "selection_rank": 74,
+      "sounding_id": "2015060505215071",
+      "source_index": 56522,
+      "xco2_ppm": 400.7085876464844
+    },
+    {
+      "csv_row": 80,
+      "latitude": 40.66374969482422,
+      "longitude": 114.67505645751953,
+      "run_time": "2015-06-05T05:21:50Z",
+      "selection_rank": 46,
+      "sounding_id": "2015060505215074",
+      "source_index": 56525,
+      "xco2_ppm": 400.1121826171875
+    },
+    {
+      "csv_row": 81,
+      "latitude": 40.63395690917969,
+      "longitude": 114.687744140625,
+      "run_time": "2015-06-05T05:21:50Z",
+      "selection_rank": 63,
+      "sounding_id": "2015060505215077",
+      "source_index": 56528,
+      "xco2_ppm": 400.0645446777344
+    },
+    {
+      "csv_row": 82,
+      "latitude": 40.71165084838867,
+      "longitude": 114.65457153320312,
+      "run_time": "2015-06-05T05:21:50Z",
+      "selection_rank": 28,
+      "sounding_id": "2015060505215101",
+      "source_index": 56530,
+      "xco2_ppm": 400.5834655761719
+    },
+    {
+      "csv_row": 83,
+      "latitude": 40.68193817138672,
+      "longitude": 114.66822052001953,
+      "run_time": "2015-06-05T05:21:50Z",
+      "selection_rank": 91,
+      "sounding_id": "2015060505215104",
+      "source_index": 56533,
+      "xco2_ppm": 400.8046875
+    },
+    {
+      "csv_row": 84,
+      "latitude": 40.652198791503906,
+      "longitude": 114.68099975585938,
+      "run_time": "2015-06-05T05:21:51Z",
+      "selection_rank": 104,
+      "sounding_id": "2015060505215107",
+      "source_index": 56536,
+      "xco2_ppm": 400.38006591796875
+    },
+    {
+      "csv_row": 85,
+      "latitude": 40.720130920410156,
+      "longitude": 114.65249633789062,
+      "run_time": "2015-06-05T05:21:51Z",
+      "selection_rank": 94,
+      "sounding_id": "2015060505215132",
+      "source_index": 56539,
+      "xco2_ppm": 399.7727966308594
+    },
+    {
+      "csv_row": 86,
+      "latitude": 40.69028854370117,
+      "longitude": 114.66577911376953,
+      "run_time": "2015-06-05T05:21:51Z",
+      "selection_rank": 62,
+      "sounding_id": "2015060505215135",
+      "source_index": 56542,
+      "xco2_ppm": 401.1880187988281
+    },
+    {
+      "csv_row": 87,
+      "latitude": 40.66038131713867,
+      "longitude": 114.67825317382812,
+      "run_time": "2015-06-05T05:21:51Z",
+      "selection_rank": 11,
+      "sounding_id": "2015060505215138",
+      "source_index": 56545,
+      "xco2_ppm": 400.080810546875
+    },
+    {
+      "csv_row": 88,
+      "latitude": 40.67859649658203,
+      "longitude": 114.67150115966797,
+      "run_time": "2015-06-05T05:21:51Z",
+      "selection_rank": 85,
+      "sounding_id": "2015060505215178",
+      "source_index": 56553,
+      "xco2_ppm": 400.7330627441406
+    },
+    {
+      "csv_row": 89,
+      "latitude": 40.766868591308594,
+      "longitude": 114.63475799560547,
+      "run_time": "2015-06-05T05:21:51Z",
+      "selection_rank": 42,
+      "sounding_id": "2015060505215201",
+      "source_index": 56554,
+      "xco2_ppm": 400.9881286621094
+    },
+    {
+      "csv_row": 90,
+      "latitude": 40.72698974609375,
+      "longitude": 114.65251922607422,
+      "run_time": "2015-06-05T05:21:52Z",
+      "selection_rank": 21,
+      "sounding_id": "2015060505215205",
+      "source_index": 56558,
+      "xco2_ppm": 400.28851318359375
+    },
+    {
+      "csv_row": 91,
+      "latitude": 40.74541091918945,
+      "longitude": 114.6459732055664,
+      "run_time": "2015-06-05T05:21:52Z",
+      "selection_rank": 68,
+      "sounding_id": "2015060505215235",
+      "source_index": 56566,
+      "xco2_ppm": 401.48077392578125
+    },
+    {
+      "csv_row": 92,
+      "latitude": 40.743709564208984,
+      "longitude": 114.64757537841797,
+      "run_time": "2015-06-05T05:21:52Z",
+      "selection_rank": 118,
+      "sounding_id": "2015060505215277",
+      "source_index": 56576,
+      "xco2_ppm": 400.4757385253906
+    },
+    {
+      "csv_row": 93,
+      "latitude": 40.81244659423828,
+      "longitude": 114.6197280883789,
+      "run_time": "2015-06-05T05:21:52Z",
+      "selection_rank": 107,
+      "sounding_id": "2015060505215302",
+      "source_index": 56579,
+      "xco2_ppm": 401.0877685546875
+    },
+    {
+      "csv_row": 94,
+      "latitude": 40.79236602783203,
+      "longitude": 114.62857818603516,
+      "run_time": "2015-06-05T05:21:52Z",
+      "selection_rank": 6,
+      "sounding_id": "2015060505215304",
+      "source_index": 56581,
+      "xco2_ppm": 401.15234375
+    },
+    {
+      "csv_row": 95,
+      "latitude": 40.75198745727539,
+      "longitude": 114.64488983154297,
+      "run_time": "2015-06-05T05:21:53Z",
+      "selection_rank": 40,
+      "sounding_id": "2015060505215308",
+      "source_index": 56585,
+      "xco2_ppm": 400.1927185058594
+    },
+    {
+      "csv_row": 96,
+      "latitude": 40.810848236083984,
+      "longitude": 114.62199401855469,
+      "run_time": "2015-06-05T05:21:53Z",
+      "selection_rank": 65,
+      "sounding_id": "2015060505215334",
+      "source_index": 56587,
+      "xco2_ppm": 400.8868713378906
+    },
+    {
+      "csv_row": 97,
+      "latitude": 40.77043533325195,
+      "longitude": 114.63829803466797,
+      "run_time": "2015-06-05T05:21:53Z",
+      "selection_rank": 69,
+      "sounding_id": "2015060505215338",
+      "source_index": 56591,
+      "xco2_ppm": 400.7914123535156
+    },
+    {
+      "csv_row": 98,
+      "latitude": 40.81768035888672,
+      "longitude": 114.62151336669922,
+      "run_time": "2015-06-05T05:21:54Z",
+      "selection_rank": 23,
+      "sounding_id": "2015060505215407",
+      "source_index": 56602,
+      "xco2_ppm": 401.2440185546875
+    },
+    {
+      "csv_row": 99,
+      "latitude": 40.885955810546875,
+      "longitude": 114.593017578125,
+      "run_time": "2015-06-05T05:21:54Z",
+      "selection_rank": 35,
+      "sounding_id": "2015060505215432",
+      "source_index": 56605,
+      "xco2_ppm": 400.0706481933594
+    },
+    {
+      "csv_row": 100,
+      "latitude": 40.932411193847656,
+      "longitude": 114.57471466064453,
+      "run_time": "2015-06-05T05:21:54Z",
+      "selection_rank": 103,
+      "sounding_id": "2015060505215501",
+      "source_index": 56615,
+      "xco2_ppm": 399.84552001953125
+    },
+    {
+      "csv_row": 101,
+      "latitude": 40.912601470947266,
+      "longitude": 114.58402252197266,
+      "run_time": "2015-06-05T05:21:54Z",
+      "selection_rank": 12,
+      "sounding_id": "2015060505215503",
+      "source_index": 56617,
+      "xco2_ppm": 399.5543212890625
+    },
+    {
+      "csv_row": 102,
+      "latitude": 40.8928108215332,
+      "longitude": 114.59306335449219,
+      "run_time": "2015-06-05T05:21:55Z",
+      "selection_rank": 117,
+      "sounding_id": "2015060505215505",
+      "source_index": 56619,
+      "xco2_ppm": 399.4781799316406
+    },
+    {
+      "csv_row": 103,
+      "latitude": 40.94101333618164,
+      "longitude": 114.57278442382812,
+      "run_time": "2015-06-05T05:21:55Z",
+      "selection_rank": 52,
+      "sounding_id": "2015060505215532",
+      "source_index": 56624,
+      "xco2_ppm": 399.9367980957031
+    },
+    {
+      "csv_row": 104,
+      "latitude": 40.92098617553711,
+      "longitude": 114.58181762695312,
+      "run_time": "2015-06-05T05:21:55Z",
+      "selection_rank": 92,
+      "sounding_id": "2015060505215534",
+      "source_index": 56626,
+      "xco2_ppm": 400.2148742675781
+    },
+    {
+      "csv_row": 105,
+      "latitude": 40.89116287231445,
+      "longitude": 114.59483337402344,
+      "run_time": "2015-06-05T05:21:55Z",
+      "selection_rank": 55,
+      "sounding_id": "2015060505215537",
+      "source_index": 56629,
+      "xco2_ppm": 400.1368713378906
+    },
+    {
+      "csv_row": 106,
+      "latitude": 40.96931838989258,
+      "longitude": 114.56139373779297,
+      "run_time": "2015-06-05T05:21:55Z",
+      "selection_rank": 82,
+      "sounding_id": "2015060505215571",
+      "source_index": 56631,
+      "xco2_ppm": 399.89764404296875
+    },
+    {
+      "csv_row": 107,
+      "latitude": 40.939453125,
+      "longitude": 114.57518005371094,
+      "run_time": "2015-06-05T05:21:55Z",
+      "selection_rank": 113,
+      "sounding_id": "2015060505215574",
+      "source_index": 56634,
+      "xco2_ppm": 399.94989013671875
+    },
+    {
+      "csv_row": 108,
+      "latitude": 40.90940856933594,
+      "longitude": 114.58795928955078,
+      "run_time": "2015-06-05T05:21:55Z",
+      "selection_rank": 70,
+      "sounding_id": "2015060505215577",
+      "source_index": 56637,
+      "xco2_ppm": 399.0075988769531
+    },
+    {
+      "csv_row": 109,
+      "latitude": 40.98775863647461,
+      "longitude": 114.55467987060547,
+      "run_time": "2015-06-05T05:21:55Z",
+      "selection_rank": 19,
+      "sounding_id": "2015060505215601",
+      "source_index": 56639,
+      "xco2_ppm": 398.2879333496094
+    },
+    {
+      "csv_row": 110,
+      "latitude": 40.9578971862793,
+      "longitude": 114.56848907470703,
+      "run_time": "2015-06-05T05:21:55Z",
+      "selection_rank": 60,
+      "sounding_id": "2015060505215604",
+      "source_index": 56642,
+      "xco2_ppm": 399.1644287109375
+    },
+    {
+      "csv_row": 111,
+      "latitude": 40.92784118652344,
+      "longitude": 114.58129119873047,
+      "run_time": "2015-06-05T05:21:56Z",
+      "selection_rank": 27,
+      "sounding_id": "2015060505215607",
+      "source_index": 56645,
+      "xco2_ppm": 399.4613952636719
+    },
+    {
+      "csv_row": 112,
+      "latitude": 40.99628829956055,
+      "longitude": 114.5526351928711,
+      "run_time": "2015-06-05T05:21:56Z",
+      "selection_rank": 110,
+      "sounding_id": "2015060505215632",
+      "source_index": 56648,
+      "xco2_ppm": 399.5448303222656
+    },
+    {
+      "csv_row": 113,
+      "latitude": 40.97650909423828,
+      "longitude": 114.56199645996094,
+      "run_time": "2015-06-05T05:21:56Z",
+      "selection_rank": 81,
+      "sounding_id": "2015060505215634",
+      "source_index": 56650,
+      "xco2_ppm": 399.7412109375
+    },
+    {
+      "csv_row": 114,
+      "latitude": 40.94633483886719,
+      "longitude": 114.5746841430664,
+      "run_time": "2015-06-05T05:21:56Z",
+      "selection_rank": 83,
+      "sounding_id": "2015060505215637",
+      "source_index": 56653,
+      "xco2_ppm": 399.61798095703125
+    },
+    {
+      "csv_row": 115,
+      "latitude": 40.994850158691406,
+      "longitude": 114.55531311035156,
+      "run_time": "2015-06-05T05:21:56Z",
+      "selection_rank": 59,
+      "sounding_id": "2015060505215674",
+      "source_index": 56658,
+      "xco2_ppm": 399.8403015136719
+    },
+    {
+      "csv_row": 116,
+      "latitude": 40.96477127075195,
+      "longitude": 114.56816864013672,
+      "run_time": "2015-06-05T05:21:56Z",
+      "selection_rank": 34,
+      "sounding_id": "2015060505215677",
+      "source_index": 56661,
+      "xco2_ppm": 399.53076171875
+    },
+    {
+      "csv_row": 117,
+      "latitude": 40.993404388427734,
+      "longitude": 114.5576171875,
+      "run_time": "2015-06-05T05:21:57Z",
+      "selection_rank": 116,
+      "sounding_id": "2015060505215706",
+      "source_index": 56668,
+      "xco2_ppm": 398.4969177246094
+    },
+    {
+      "csv_row": 118,
+      "latitude": 40.97323226928711,
+      "longitude": 114.56590270996094,
+      "run_time": "2015-06-05T05:21:57Z",
+      "selection_rank": 93,
+      "sounding_id": "2015060505215708",
+      "source_index": 56670,
+      "xco2_ppm": 400.48040771484375
+    },
+    {
+      "csv_row": 119,
+      "latitude": 40.991676330566406,
+      "longitude": 114.55941772460938,
+      "run_time": "2015-06-05T05:21:57Z",
+      "selection_rank": 2,
+      "sounding_id": "2015060505215738",
+      "source_index": 56678,
+      "xco2_ppm": 400.03277587890625
+    }
+  ],
+  "source": {
+    "bytes": 80931081,
+    "path": "D:\\co2_data\\nasa\\oco2_l2_lite_fp_11.2r\\oco2_LtCO2_150605_B11210Ar_240822204934s.nc4",
+    "sha256": "e068ca7793694abc13844a76bb7a0df11ba49d7a858cfceadd1fd458f1831b09"
+  }
+}

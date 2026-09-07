@@ -1,0 +1,6 @@
+assembler U10M at receptor pixel (db formula): 2.6515716314315796
+native fractional cell of receptor: 310.5019015824124 347.85019138701136 (in bounds: True )
+native-grid bilinear U10M at receptor: 2.6772301880558675
+difference vs db formula: 0.025658675833577504
+db fractional cell of receptor: 310.328520741769 347.74814053479054
+db bilinear: 2.651571451099916

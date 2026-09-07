@@ -1,0 +1,56 @@
+# build_date_log 20170429 role=train_p250
+[manifest] rows=120 matched=120 mismatch=0 missing_local=0
+[assemble] rc=0
+  [assemble] manifest rows: 120 snapshots: ['20170429.21z']
+  [assemble] required feature snapshots: ['20170429.03z', '20170429.09z', '20170429.15z', '20170429.21z']
+  [assemble]   feature file: True /mnt/d/lagrangian-jepa-cn/reuse_stilt/server_backup_20260830/hrrr_stilt_production_v1/train_p250/20170429/model_features/a2017042903_f00.npz
+  [assemble]   feature file: True /mnt/d/lagrangian-jepa-cn/reuse_stilt/server_backup_20260830/hrrr_stilt_production_v1/train_p250/20170429/model_features/a2017042909_f00.npz
+  [assemble]   feature file: True /mnt/d/lagrangian-jepa-cn/reuse_stilt/server_backup_20260830/hrrr_stilt_production_v1/train_p250/20170429/model_features/a2017042915_f00.npz
+  [assemble]   feature file: True /mnt/d/lagrangian-jepa-cn/reuse_stilt/server_backup_20260830/hrrr_stilt_production_v1/train_p250/20170429/model_features/a2017042921_f00.npz
+  [assemble] loaded 20170429.03z {'U10M': ((1059, 1799), dtype('float32'), -0.5915346741676331), 'V10M': ((1059, 1799), dtype('float32'), -0.48988112807273865), 'PBLH': ((1059, 1799), dtype('float32'), 412.9632568359375), 'PRSS': ((1059, 1799), dtype('float32'), 96198.09375)} (0.3s)
+  [assemble] loaded 20170429.09z {'U10M': ((1059, 1799), dtype('float32'), -0.5990068316459656), 'V10M': ((1059, 1799), dtype('float32'), -0.42161163687705994), 'PBLH': ((1059, 1799), dtype('float32'), 288.44482421875), 'PRSS': ((1059, 1799), dtype('float32'), 96268.6953125)} (0.5s)
+  [assemble] loaded 20170429.15z {'U10M': ((1059, 1799), dtype('float32'), -0.48499390482902527), 'V10M': ((1059, 1799), dtype('float32'), -0.2933668792247772), 'PBLH': ((1059, 1799), dtype('float32'), 445.9906921386719), 'PRSS': ((1059, 1799), dtype('float32'), 96445.609375)} (0.7s)
+  [assemble] loaded 20170429.21z {'U10M': ((1059, 1799), dtype('float32'), 0.0746336504817009), 'V10M': ((1059, 1799), dtype('float32'), -0.6477972865104675), 'PBLH': ((1059, 1799), dtype('float32'), 914.6201171875), 'PRSS': ((1059, 1799), dtype('float32'), 96370.9140625)} (0.9s)
+  [assemble]  20/120 kept=20 skip=0 (1.3s)
+  [assemble]  40/120 kept=40 skip=0 (1.6s)
+  [assemble]  60/120 kept=60 skip=0 (2.0s)
+  [assemble]  80/120 kept=80 skip=0 (2.4s)
+  [assemble]  100/120 kept=100 skip=0 (2.7s)
+  [assemble]  120/120 kept=120 skip=0 (3.1s)
+  [assemble] saved 120 samples -> /mnt/d/lagrangian-jepa-cn/data/datasets/formal_hrrr_train_p250/20170429 (skip 0) (4.2s)
+  {
+    "n_samples": 120,
+    "n_skipped": 0,
+    "arrays": {
+      "inputs": [
+        120,
+        20,
+        128,
+        128
+      ],
+      "targets": [
+        120,
+        128,
+        128
+      ]
+    }
+  }
+  
+[validate_dataset.py] rc=0
+  load_dataset replica: PASS
+    x: (120, 20, 128, 128) float32 | y: (120, 128, 128) float32
+    samples: 120 | contract grid: 128 | schema: 5
+    target_mode: stilt_surface_footprint_physical | label_source: stilt_xstilt
+    unique sim_ids: 120 | unique receptors: 120 | unique input/target pairs: 120
+    inputs_sha256: a37607e9ec108eed3dea5cfb3270362e37d733d9daa81c3676d51e11f7fa13f5
+    targets_sha256: 50e270eb3e8a314635e7e6f4637efe181b8b47d4f50e5e0bb55221b55840e7a1
+    coverage min/mean/max: 0.98443603515625 0.98443603515625 0.98443603515625
+    footprint_sum min/mean/max: 1.5170027913507043 2.6882695872134628 3.829568913414856
+  
+[train_stilt_strict.load_dataset] rc=0
+  load_dataset PASS
+  x (120, 20, 128, 128) float32 y (120, 128, 128) float32
+  uniqueness {'unique_sim_ids': 120, 'unique_receptors': 120, 'unique_input_target_pairs': 120}
+  fingerprints {'inputs_sha256': 'a37607e9ec108eed3dea5cfb3270362e37d733d9daa81c3676d51e11f7fa13f5', 'targets_sha256': '50e270eb3e8a314635e7e6f4637efe181b8b47d4f50e5e0bb55221b55840e7a1', 'metadata_sha256': '4dc0af4391bbbc833c5484ae8900ba25509bed099ea82eeb4f2808fe9d7408c5'}
+  
+ALL CHECKS PASSED

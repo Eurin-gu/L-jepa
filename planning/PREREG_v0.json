@@ -1,0 +1,79 @@
+{
+ "schema": "lagrangian_jepa_prereg_v0",
+ "created_utc": "2026-09-05T04:00:00Z",
+ "metrics": {
+  "pearson_r": {
+   "domains": [
+    "raw",
+    "log10(x+1e-4*med_ref)",
+    "amp_norm"
+   ],
+   "per_sample": true,
+   "aggregation": "per_event, no pooling"
+  },
+  "rmse": {
+   "domains": [
+    "raw",
+    "log",
+    "amp_norm"
+   ]
+  },
+  "js_divergence": {
+   "grid": 128,
+   "smooth_km": 5
+  },
+  "overlap": {
+   "grid": 128,
+   "smooth_km": 5
+  },
+  "mass_error": {
+   "type": "relative"
+  },
+  "center_distance_km": true,
+  "peak_distance_km": true,
+  "coverage": true
+ },
+ "noise_scale": {
+  "self_baseline": "split-half p500a vs p500b (same receptors) r/relRMSE/JS",
+  "reference_pool": "p500a+p500b pooled ~ p1000",
+  "spearman_brown": true,
+  "report_separate": [
+   "model_vs_p250_noise",
+   "model_vs_p1000_noise"
+  ],
+  "first_data_point": {
+   "date": "20171111",
+   "region": "so_cal",
+   "r_median": 0.9869,
+   "relrmse_median": 0.34
+  }
+ },
+ "splits": {
+  "train_val": "by date",
+  "formal_test": "one-time consumption, .used.json; HRRR-arm 5 dates (20160318..20170922) only for hrrr arm formal claims; era5-v1 defines own test manifest",
+  "holdouts": [
+   "permian_westTX (non-mountain)",
+   "co_front_range (mountain diagnostic + HRRR dual-met cross-check)"
+  ],
+  "loro": "leave-one-region-out over pilot regions"
+ },
+ "statistics": {
+  "unit": "date",
+  "paired_tests": "cluster-robust SE by date; date-level aggregation secondary; bootstrap CI"
+ },
+ "pretraining": {
+  "pool_scan": [
+   0,
+   "1x",
+   "3x",
+   "10x"
+  ]
+ },
+ "datasets_frozen": {
+  "so_hrrr_20171111": "datasets/so_hrrr_20171111",
+  "formal_hrrr_train_p250_all": "datasets/formal_hrrr_train_p250_all (1200)",
+  "formal_hrrr_validation_p1000": "2 dates",
+  "formal_hrrr_formal_test_p1000": "5 dates untouched"
+ },
+ "notes": "log-offset & smooth kernel frozen before formal runs; pre-reg checksum to be added when final."
+}

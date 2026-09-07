@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-08-27T17:34:27Z",
+  "status": "roles_frozen_before_label_production",
+  "source_selection_manifest": {
+    "path": "/media/data/footexp_data/stilt_receptors_v1/selection_manifest.json",
+    "sha256": "48546fb1ebfa2249d1ba972d937ca0f60dff32a6c5a01974fd7fb96a0ca70d93"
+  },
+  "meteorology": {
+    "source": "HRRR pressure-level GRIB2",
+    "strategy": "hourly-analysis",
+    "forecast_hour": 0,
+    "backtrack_hours": 24,
+    "required_hour_count": "26_or_27_from_receptor_window",
+    "retention": "outputs-only"
+  },
+  "roles": {
+    "train": {
+      "dates": [
+        "20160428", "20160523", "20160615", "20160901", "20161021",
+        "20170314", "20170429", "20170611", "20170720", "20171006",
+        "20171118"
+      ],
+      "particles": 250,
+      "expected_unique_labels": 1320
+    },
+    "validation": {
+      "dates": ["20160715", "20170517"],
+      "particles": 1000,
+      "expected_unique_labels": 240
+    },
+    "formal_test": {
+      "dates": ["20160318", "20160802", "20161111", "20170116", "20170922"],
+      "particles": 1000,
+      "expected_unique_labels": 600,
+      "untouched": true
+    }
+  },
+  "fidelity_calibration": {
+    "dates": ["20160428", "20171006"],
+    "particles": 1000,
+    "expected_outputs": 240,
+    "separate_dataset": true,
+    "reason": "estimate label noise against the 250-particle training labels"
+  },
+  "expected_unique_main_labels": 2160,
+  "scheduler": {
+    "hour_workers": 4,
+    "range_jobs": 8,
+    "stilt_jobs": 24,
+    "validation_jobs": 16,
+    "download_mode": "range",
+    "download_timeout": 180,
+    "download_retries": 8,
+    "hrrr_base_url": "https://storage.googleapis.com/high-resolution-rapid-refresh",
+    "min_free_gib": 20
+  },
+  "formal_test_policy": {
+    "allowed_before_one_time_evaluation": [
+      "artifact_presence",
+      "finite_nonnegative_positive_mass",
+      "trajectory_time_coverage",
+      "schema_and_provenance_contract",
+      "array_shape_dtype_and_sha256"
+    ],
+    "forbidden_before_one_time_evaluation": [
+      "model_selection",
+      "hyperparameter_selection",
+      "architecture_selection",
+      "test_metric_inspection"
+    ],
+    "dataset_manifest": "freeze with train_stilt_strict.py after schema-v5 build",
+    "consumption": "first formal evaluation creates .used.json"
+  },
+  "receptors": {
+    "20160318": {
+      "csv": "receptors_20160318_n120_maximin.csv",
+      "csv_sha256": "06be54724f6d82d6ce54a1454c319720bc842387f4b89d8270b8bf6158dc64eb",
+      "provenance_sha256": "40f773f96a4d286c89447fe140a5459381894b93f807bffa7fb65a55a49ba258"
+    },
+    "20160428": {
+      "csv": "receptors_20160428_n120_maximin.csv",
+      "csv_sha256": "03f08f0874b169b2c1259a34d0ec9bcd3c747d7a2533a4bff6c927dae917f987",
+      "provenance_sha256": "eb2d7847791a8da8b1f90fa01c2d6d16b5a01146073324e79c78a8fbbd115c4c"
+    },
+    "20160523": {
+      "csv": "receptors_20160523_n120_maximin.csv",
+      "csv_sha256": "5cd1003f9dd26fef27caedfa2432fa5557faada6ef67b74d7bc272aa6078b562",
+      "provenance_sha256": "7b117e8a8e10edcfcb72c845752e843aa5bb9548cd8601421556c624164d2947"
+    },
+    "20160615": {
+      "csv": "receptors_20160615_n120_maximin.csv",
+      "csv_sha256": "53db0de11d91943fc8bd8ece00bea884e8525c3f42f4ceea361e6258e87e0a13",
+      "provenance_sha256": "eb451344ba3be059e66e6755af964d5d22ac3963efa714c0b9cb3186ba7a3102"
+    },
+    "20160715": {
+      "csv": "receptors_20160715_n120_maximin.csv",
+      "csv_sha256": "677fc7a396a47c7bbaba88e099400c94dc191cdd6f054b702f40cdc2066c559d",
+      "provenance_sha256": "d2cd15698ddd3a060ced2d2ad4c58c2037943260fbadb1f8434c6f9d42fa9e65"
+    },
+    "20160802": {
+      "csv": "receptors_20160802_n120_maximin.csv",
+      "csv_sha256": "d833e6638c258fec5489e083fbf5c7a4c6b5784b969f744c8d078a194af437d1",
+      "provenance_sha256": "9a5ff5ffb11e5bcee30d8b99da9d627215f77021550bf1f5ac3ace0da9e973e6"
+    },
+    "20160901": {
+      "csv": "receptors_20160901_n120_maximin.csv",
+      "csv_sha256": "f969ec23b51a7d6bb857f8665c11a70d973e08d324e18717a97c0a3777466e6b",
+      "provenance_sha256": "fd19ad2b0837fcc98fbc614ae5accae3d964cf87c799b34658027ab7371679a6"
+    },
+    "20161021": {
+      "csv": "receptors_20161021_n120_maximin.csv",
+      "csv_sha256": "f64307cc531acb57c6bac1382bd201cad81830645ba08c8c51185ebe0d82cbc9",
+      "provenance_sha256": "64f88c8516133f1660f551757bb09b389a47bcf8d04392f9120ad2a91b1c2aab"
+    },
+    "20161111": {
+      "csv": "receptors_20161111_n120_maximin.csv",
+      "csv_sha256": "97df9d925e4a99512687ef74303c09800dc9250eafb19e926fd2f9c23158facc",
+      "provenance_sha256": "ee7cb7dd3ca96d7ae658e76f0aae1c8f5504b16e7ed610c8bd8ab1cf4aa7f988"
+    },
+    "20170116": {
+      "csv": "receptors_20170116_n120_maximin.csv",
+      "csv_sha256": "0d3b32e575b19536fbb14d640a4caf71a4916dde4a433fdbb7fb9cc186b08477",
+      "provenance_sha256": "d4d4fe2bb498a6b00dbf19aebbaa2a48c714ca83966db7884bde73d3c0a3e971"
+    },
+    "20170314": {
+      "csv": "receptors_20170314_n120_maximin.csv",
+      "csv_sha256": "e0a2d76414090618c74ce7d53ed041c03ccff9f5bc7f694869c945ee5a1ee7d1",
+      "provenance_sha256": "a693585bb02ff27bab95b12e2a51694a164ec72c7d529837a6fc5925691e55f8"
+    },
+    "20170429": {
+      "csv": "receptors_20170429_n120_maximin.csv",
+      "csv_sha256": "549a139f09232f3da7328b52a4bf1fd1f75159bce4d115b048c304f218deccaf",
+      "provenance_sha256": "9c24bd297672a9d3ba4851d30d3bafbc4cc09b033ab9b65e56b6b57ece8ab9f2"
+    },
+    "20170517": {
+      "csv": "receptors_20170517_n120_maximin.csv",
+      "csv_sha256": "f78099ed08b5a311ee6b5873f17ea26b749e42adb034df62afcf5584fd56a0b6",
+      "provenance_sha256": "9bf34b506aaf454d633147eaef9f62d5a46c10348cfbe26ff67d4576a67b2329"
+    },
+    "20170611": {
+      "csv": "receptors_20170611_n120_maximin.csv",
+      "csv_sha256": "ce6ffacbc7a8b34f7ef9a26e9dd739f2cd3381232ff064f5d47ddaae52bed57d",
+      "provenance_sha256": "edd7f9dce3944379f195e1e0a0691cf8b510b25adc7458297c3a7f3c7b692f3f"
+    },
+    "20170720": {
+      "csv": "receptors_20170720_n120_maximin.csv",
+      "csv_sha256": "7a2ce104d9f2c1e480e326c4a64ea33906fe057040f5b9a3edd017e0947115fa",
+      "provenance_sha256": "ef83515287ba655e324de48c495f0f9a92c313e975ca3b5d1cb760132786abf0"
+    },
+    "20170922": {
+      "csv": "receptors_20170922_n120_maximin.csv",
+      "csv_sha256": "869670de5f743a707c23ddd58d1e1b245f63aa1bba672912531038955daace31",
+      "provenance_sha256": "b4dcf1f7a492c5eec3f0312ddba3957e465bf0d17d7f03d503aff960328c6807"
+    },
+    "20171006": {
+      "csv": "receptors_20171006_n120_maximin.csv",
+      "csv_sha256": "6abae4d054fa974ad17bec08f5ca492b4ce9dca2bbb6a73da56ad4260fb918c5",
+      "provenance_sha256": "67695e5fd3a0c834e42a317133166cfa124bf83a592dcd79458b2e8c81946fd1"
+    },
+    "20171118": {
+      "csv": "receptors_20171118_n120_maximin.csv",
+      "csv_sha256": "85fc3e227d9ff524f2145e0d41b32f8f2f0ace1fbed9f86d7fdf5e25f945e78f",
+      "provenance_sha256": "c6ad2375bdb1e3b29cae40fa0a8988477755492fee46883a1c2e6e76eb5e675c"
+    }
+  }
+}
