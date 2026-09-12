@@ -1,9 +1,0 @@
-load_dataset replica: PASS
-  x: (1200, 20, 128, 128) float32 | y: (1200, 128, 128) float32
-  samples: 1200 | contract grid: 128 | schema: 5
-  target_mode: stilt_surface_footprint_physical | label_source: stilt_xstilt
-  unique sim_ids: 1200 | unique receptors: 1200 | unique input/target pairs: 1200
-  inputs_sha256: 8a44a5c412b9e16dbea217b02def51409e45194c4f46a9d0a59702a6e4a97189
-  targets_sha256: ea150d262ef2b1b8269e8f29d89bf69c8354e799bf72827cffb6d6ce185a14a5
-  coverage min/mean/max: 0.98443603515625 0.98443603515625 0.98443603515625
-  footprint_sum min/mean/max: 0.04548058746577278 37.461571222562974 156.5900288048378

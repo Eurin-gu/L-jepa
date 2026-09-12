@@ -23,7 +23,8 @@ import torch.nn.functional as F
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import config as C
-from models import Encoder, JEPA, MeteorologyMAE, NestedUNetSmall, PlainUNet
+from models import (Encoder, JEPA, MeteorologyMAE, MeteorologyTubularMAE,
+                     NestedUNetSmall, PlainUNet)
 from lagrangian_jepa import LagrangianJEPA, build_trajectory_cache
 from provenance import atomic_json, data_contract, fingerprint, source_fingerprint
 
@@ -471,6 +472,45 @@ def train_mae(encoder, x_unlabeled, epochs, lr, batch, seed, device="cpu",
         history.append({"epoch": epoch + 1, "loss": total / count})
         if (epoch + 1) % max(1, epochs // 5) == 0 or epoch == 0:
             print(f"  [met-mae] ep {epoch+1}/{epochs} loss {total/count:.4f}")
+    return model.encoder, history
+
+
+def train_tubular_mae(encoder, x_unlabeled, epochs, lr, batch, seed, device="cpu",
+                      mask_fraction=0.5, tube_radius=1):
+    """Pretrain with MeteorologyTubularMAE: tube-shaped (not random-block) mask.
+
+    Structural control for the L-JEPA audit -- same masked-area budget as the
+    random-block Met-MAE and the same tube geometry as the Lagrangian arm,
+    but the tube heading is a per-sample random direction rather than the
+    wind-inflow direction.
+    """
+    if len(x_unlabeled) == 0:
+        raise ValueError("Met-TubularMAE pretraining requires at least one input")
+    base = encoder.c0.conv1.out_channels
+    model = MeteorologyTubularMAE(
+        encoder, in_channels=x_unlabeled.shape[1], base=base,
+        mask_fraction=mask_fraction, tube_radius=tube_radius, seed=seed,
+    ).to(device)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    dummy = np.zeros((len(x_unlabeled), 1), dtype=np.float32)
+    loader = make_loader(x_unlabeled, dummy, batch, seed=seed)
+    history = []
+    for epoch in range(epochs):
+        model.train()
+        total = 0.0
+        count = 0
+        for xb, _ in loader:
+            xb = xb.to(device)
+            optimizer.zero_grad(set_to_none=True)
+            reconstruction, mask = model(xb)
+            loss = model.loss(reconstruction, xb, mask)
+            loss.backward()
+            optimizer.step()
+            total += loss.item() * len(xb)
+            count += len(xb)
+        history.append({"epoch": epoch + 1, "loss": total / count})
+        if (epoch + 1) % max(1, epochs // 5) == 0 or epoch == 0:
+            print(f"  [met-tubular-mae] ep {epoch+1}/{epochs} loss {total/count:.4f}")
     return model.encoder, history
 
 

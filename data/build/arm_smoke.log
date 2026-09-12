@@ -1,7 +1,0 @@
-[formal_test_p1000] 20160318 OK -> npz=4 by-id-runs=120
-[formal_test_p1000] 20160802 OK -> npz=4 by-id-runs=120
-[formal_test_p1000] 20161111 OK -> npz=4 by-id-runs=120
-[formal_test_p1000] 20170116 OK -> npz=4 by-id-runs=120
-[formal_test_p1000] 20170922 OK -> npz=4 by-id-runs=120
-summary written: /mnt/d/lagrangian-jepa-cn/data/build/arm_build_summary.json /mnt/d/lagrangian-jepa-cn/data/build/arm_build_summary.csv
-no train_p250 dates built; merge skipped

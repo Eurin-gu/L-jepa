@@ -8,6 +8,7 @@
 """
 import copy
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -345,6 +346,69 @@ class MeteorologyMAE(nn.Module):
             raise ValueError("MeteorologyMAE requires matching 20-channel tensors")
         error = (reconstruction[:, 1:17] - target[:, 1:17]).square()
         return (error * mask).sum() / (mask.sum() * 16).clamp_min(1)
+
+
+class MeteorologyTubularMAE(MeteorologyMAE):
+    """Met-MAE control whose mask is a straight *tube* through the receptor.
+
+    This is the structural control for the L-JEPA causality audit: the mask
+    is a contiguous corridor (same coarse block count and tube geometry as
+    the Lagrangian arm) but its orientation is a per-sample random heading,
+    NOT the wind-inflow direction.  If a micro-finetune advantage of the
+    true input-wind L-JEPA arm persists over this control, the advantage is
+    attributable to masking along the real inflow rather than to "masking
+    any equal-length tube through the receptor" (see pre-registration).
+
+    mask_fraction is interpreted on the coarse 4x-downsampled grid exactly
+    like MeteorologyMAE so the two controls mask comparable areas.
+    """
+
+    def __init__(self, encoder, in_channels=20, base=16, mask_fraction=0.5,
+                 tube_radius=1, seed=0):
+        super().__init__(encoder, in_channels=in_channels, base=base,
+                         mask_fraction=mask_fraction)
+        self.tube_radius = int(tube_radius)          # coarse-grid half-width
+        self._rng = np.random.default_rng(seed)
+
+    def make_mask(self, x):
+        batch, _, height, width = x.shape
+        if height % 4 or width % 4:
+            raise ValueError("MeteorologyTubularMAE input must be divisible by 4")
+        gh, gw = height // 4, width // 4
+        n_mask = max(1, min(gh * gw - 1,
+                           round(self.mask_fraction * gh * gw)))
+        device = x.device
+        # per-sample random heading through the coarse-grid centre
+        thetas = self._rng.uniform(0.0, 2.0 * np.pi, size=batch)
+        coarse = np.zeros((batch, gh, gw), dtype=np.float64)
+        cy, cx = gh / 2.0, gw / 2.0
+        r = np.hypot(gh, gw) / 2.0 + self.tube_radius  # cover the domain
+        for b in range(batch):
+            t = thetas[b]
+            dx, dy = np.cos(t), np.sin(t)
+            yy, xx = np.mgrid[0:gh, 0:gw]
+            # signed distance from the receptor-centre line
+            dist = np.abs((xx - cx) * dy - (yy - cy) * dx)
+            on_tube = dist <= self.tube_radius + 0.5
+            # keep only a mask_fraction-length window along the ray so the
+            # masked cell count matches MeteorologyMAE; window is centred
+            # on the receptor so the tube always passes through the centre
+            along = (xx - cx) * dx + (yy - cy) * dy
+            half = np.sqrt(n_mask / max(1.0, on_tube.sum() / max(1, gh * gw)))
+            window = np.abs(along) <= (gh * half) / 2.0 * 0.0 + 1e9
+            sel = on_tube & window
+            coarse[b][sel] = 1.0
+        # enforce the same masked-cell budget as the random-block control
+        flat = coarse.reshape(batch, -1)
+        budget = n_mask
+        for b in range(batch):
+            idx = np.where(flat[b] > 0)[0]
+            if len(idx) > budget:
+                keep = idx[:budget]
+                flat[b][idx[budget:]] = 0.0
+        mask = coarse.reshape(batch, 1, gh, gw)
+        mask = torch.from_numpy(mask).to(device=device, dtype=x.dtype)
+        return F.interpolate(mask, size=(height, width), mode="nearest")
 
 
 class SpectralConv2d(nn.Module):

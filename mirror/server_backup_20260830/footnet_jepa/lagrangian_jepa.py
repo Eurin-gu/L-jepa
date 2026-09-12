@@ -163,14 +163,63 @@ def build_trajectory_cache(samples, grid, npart):
     return np.stack(out).astype(np.float32)
 
 
+# ---------------------------------------------------------------------------
+# Fake-trajectory controls (F1-F3) for the L-JEPA causality audit.
+#
+#   F1 reverse: integrate (-u, -v). Path length identical, direction reversed.
+#   F2 perp:    integrate (-v,  u). 90-degree-rotated wind -> geometric tube
+#               that crosses (not follows) the true footprint bright band.
+#   F3 random:  per-sample fixed heading theta with step size = true speed,
+#               i.e. a straight tube of the same length as the wind skeleton
+#               but with no physical advection direction.
+#
+# These change ONLY how the tube is drawn.  The model, the segment-mask rule,
+# the mask length, and the supervised budget stay identical to the true
+# input-wind arm (see train_stilt_strict / planning pre-registration).
+# ---------------------------------------------------------------------------
+TRAJ_TRANSFORMS = ("none", "reverse", "perp", "random_heading")
+
+
+def apply_trajectory_transform(u, v, transform, rng=None):
+    """Return (u2, v2) with the requested direction control.
+
+    u, v : (B, T) centre winds, already de-normalised to m/s.
+    transform : none | reverse | perp | random_heading.
+    rng : np.random.Generator used only by random_heading (one fixed theta
+          per sample, constant along the trajectory).
+    """
+    u = np.asarray(u, dtype=np.float64)
+    v = np.asarray(v, dtype=np.float64)
+    if transform == "none":
+        return u, v
+    if transform == "reverse":
+        return -u, -v
+    if transform == "perp":
+        return -v, u
+    if transform == "random_heading":
+        if rng is None:
+            rng = np.random.default_rng(0)
+        theta = rng.uniform(0.0, 2.0 * np.pi, size=u.shape[0])
+        speed = np.hypot(u, v)                 # (B, T) keeps tube length aligned
+        ct = np.cos(theta)[:, None]
+        st = np.sin(theta)[:, None]
+        return speed * ct, speed * st
+    raise ValueError("unknown trajectory transform: " + str(transform))
+
+
 def input_wind_trajectory(inputs, backhours=None, step_h=None,
-                          spacing_km=None):
+                          spacing_km=None, transform="none", seed=0):
     """Derive a deployment-available mean trajectory from FootNet inputs.
 
     This deliberately uses only the normalized U10M/V10M channels already
     presented to the encoder.  It is therefore suitable for the primary
     L-JEPA arm, unlike a STILT particle trajectory produced by the same solve
     as the downstream footprint label.
+
+    transform applies one of the F1-F3 direction controls (see module docs)
+    to the centre wind *before* integration; the numerical integration and
+    the returned coordinate frame are unchanged.  seed is used only when
+    transform == "random_heading".
     """
     import config as C
 
@@ -200,6 +249,13 @@ def input_wind_trajectory(inputs, backhours=None, step_h=None,
         + C.MET_OFFSETS[1]
         for index in range(len(backhours))
     ], axis=1).astype(np.float64)
+
+    if transform not in TRAJ_TRANSFORMS:
+        raise ValueError("unknown trajectory transform: " + str(transform))
+    if transform != "none":
+        rng = (np.random.default_rng(seed) if transform == "random_heading"
+               else None)
+        u, v = apply_trajectory_transform(u, v, transform, rng=rng)
 
     total_h = float(backhours[-1])
     times = np.arange(0.0, total_h + 0.5 * step_h, step_h)

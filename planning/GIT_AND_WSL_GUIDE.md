@@ -1,8 +1,9 @@
 # Git 与 WSL 使用手册
 
-> 本仓库：`D:\lagrangian-jepa-cn`　分支：`main`　首个提交：`5a9fa7d`（2026-09-07）
+> 本仓库：`D:\lagrangian-jepa-cn`　分支：`main`
+> 提交：`5a9fa7d` 初始化 → `6434267` 补手册（2026-09-07）
 > 环境：Windows 11 + git 2.54 / WSL2 Ubuntu-24.04（默认用户 `yuki`，root 免密）
-> 写给本项目使用者。所有命令都在本机实测过。
+> 写给本项目使用者。所有命令与数字都在本机实测过，并于建库当日复核。
 
 ---
 
@@ -13,21 +14,25 @@
 | 项 | 数值 |
 |---|---|
 | 磁盘总占用 | 约 114 GB |
-| **被 git 跟踪** | **799 文件 / 10.79 MB** |
-| `.git` 目录 | 9 MB |
+| **被 git 跟踪** | **802 文件 / 约 13 MB** |
+| `.git` 目录 | 8.2 MB |
 | 被忽略 | 约 114 GB（数据集、气象缓存、STILT 标签、Python 环境、二进制） |
 
-跟踪内容构成：
+跟踪内容构成（按顶层目录）：
 
 ```
-449 toolchain    STILT/era52arl 的 Fortran·R 源码 + 192 个 .sh 编排脚本
+451 toolchain    STILT/era52arl 的 Fortran·R 源码 + 194 个 .sh 编排脚本
 217 data         data/build 建集器代码 + data/receptors_v2 受体表
  92 mirror       上游 footnet_jepa 代码快照 + results 实验 json
- 39 planning     决策与轮次文档（项目的大脑）
+ 40 planning     决策与轮次文档（项目的大脑）
   2 .gitignore / .gitattributes
 ```
 
-按扩展名：192 `.sh`、135 `.f`、99 `.json`、70 `.py`、66 `.csv`、55 `.md`、55 `.log`、31 `.r`。
+按扩展名：194 `.sh`、135 `.f`、99 `.json`、70 `.py`、66 `.csv`、56 `.md`、55 `.log`、31 `.r`。
+
+> 复核方式：`bash toolchain/git_verify_guide_facts.sh`。
+> 它会重新统计上述全部数字，并核对凭据排除状态与仓库级配置。
+> 改动 `.gitignore` 或新增脚本后跑一次，即可确认本节没有过期。
 
 ### 1.2 三个约定，违反会出事
 
@@ -50,7 +55,7 @@
 **约定二：行尾一律 LF**
 
 Windows 全局配置是 `core.autocrlf = true`，会在 checkout 时把 LF 转 CRLF。
-本仓库有 192 个 `.sh` 要在 WSL 里执行，带 CRLF 的脚本会报：
+本仓库有 194 个 `.sh` 要在 WSL 里执行，带 CRLF 的脚本会报：
 
 ```
 bash\r: No such file or directory
@@ -349,5 +354,6 @@ ERA5 下载链路要求单实例运行，详见 `planning/ROUND73_STATUS.md`：
 | `git_diagnose.sh` | 排查闸门拦下的问题 |
 | `git_measure_pending.sh` | 测量待定目录体积 |
 | `git_chown.sh` | 修正 `.git` 属主 |
+| `git_verify_guide_facts.sh` | 复核本手册引用的全部数字与凭据排除状态 |
 
 全部只读或只动 `.git` 内部，不修改任何数据文件。

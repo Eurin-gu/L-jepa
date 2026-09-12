@@ -120,3 +120,5 @@ _writetest.txt
 .vscode/
 .idea/
 *.iml
+
+data/build/_logs/
